@@ -7,13 +7,13 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
+import java.awt.event.MouseMotionListener;
 
 import javax.swing.JComponent;
 
-public class CardV extends JComponent implements MouseListener{
+public class CardV extends JComponent implements MouseListener, MouseMotionListener {
 
-	//private int player;
+	// private int player;
 	private Color mainColor;
 	private Color sidesColor;
 	// private BufferedImage(?) image;
@@ -22,13 +22,17 @@ public class CardV extends JComponent implements MouseListener{
 	public CardV(Color mainColor, Color sidesColor, boolean isClickable) {
 		this.setMainColor(mainColor);
 		this.setSidesColor(sidesColor);
-		
-		if(isClickable)
+
+		if (isClickable) {
 			this.addMouseListener(this);
-    }
-	
+			this.addMouseMotionListener(this);
+		}
+	}
+
 	/**
-	 * Costruttore realizzato ad hoc per le carte che occupano le posizioni angolari della board
+	 * Costruttore realizzato ad hoc per le carte che occupano le posizioni angolari
+	 * della board
+	 * 
 	 * @param isVisible: boolean
 	 */
 	public CardV(boolean isVisible) {
@@ -74,33 +78,50 @@ public class CardV extends JComponent implements MouseListener{
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		System.out.println("I'm clickable!");
-		
+
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		// TODO Auto-generated method stub
+		if (MatchV.selectedCard.isSelected()) {
+			MatchV.selectedCard.setBounds((int) (MatchV.frame.getContentPane().getMousePosition().getX() - 50),
+					(int) (MatchV.frame.getContentPane().getMousePosition().getY() - 50), 100, 100);
+		} else {
+			MatchV.selectedCard.setBounds((int) (MatchV.frame.getContentPane().getMousePosition().getX() - 10),
+					(int) (MatchV.frame.getContentPane().getMousePosition().getY() - 10), 20, 20);
+		}
+		MatchV.selectedCard.repaint();
+	}
 
 }

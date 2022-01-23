@@ -20,13 +20,13 @@ import java.awt.geom.Point2D.Double;
 
 public class MatchV implements MouseMotionListener, MouseListener {
 
-	private JFrame frame;
+	static JFrame frame;
 	private JPanel panel;
 
 	private BoardV board;
 	private PlayerV player1;
 	private PlayerV player2;
-	private SelectedCardV selectedCard;
+	static SelectedCardV selectedCard;
 
 	/**
 	 * Launch the application.
@@ -93,8 +93,6 @@ public class MatchV implements MouseMotionListener, MouseListener {
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		//TODO QUANDO VA SU UN COMPONENT CLICKABLE PERDO LA POSIZIONE DEL MOUSE.
-		
 		if (selectedCard.isSelected()) {
 			selectedCard.setBounds((int) (e.getPoint().getX() - 50), (int) (e.getPoint().getY() - 50), 100, 100);
 		}else {

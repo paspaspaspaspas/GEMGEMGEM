@@ -4,6 +4,9 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JComponent;
 
@@ -26,9 +29,10 @@ public class BoardV extends JComponent {
 				else
 					cards[i][j] = new BoardCardV();
 				this.add(cards[i][j]);
-				
+
 			}
 		}
+
 	}
 
 	protected void paintComponent(Graphics g) {
@@ -39,14 +43,16 @@ public class BoardV extends JComponent {
 	}
 
 	private void setCards() {
-		dimCard = (int)(Math.min(this.getWidth(), this.getHeight()) / 6);
+		dimCard = (int) (Math.min(this.getWidth(), this.getHeight()) / 6);
 		int paddingX = (this.getWidth() - dimCard * cardsPerSides) / 2;
 		int paddingY = (this.getHeight() - dimCard * cardsPerSides) / 2;
 		for (int i = 0; i < cardsPerSides; i++) {
 			for (int j = 0; j < cardsPerSides; j++) {
-				if(cards[i][j].isVisible())
+				if (cards[i][j].isVisible())
 					cards[i][j].setBounds(i * dimCard + paddingX, j * dimCard + paddingY, dimCard, dimCard);
 			}
 		}
 	}
+	
+	
 }
