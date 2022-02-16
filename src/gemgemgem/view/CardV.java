@@ -8,21 +8,33 @@ import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 
+import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 
+/**
+ * Rappresenta le caratteristiche base di una carta del gioco, comuni a
+ * prescindere dal posizionamento della stessa.
+ * 
+ * @author pasos
+ *
+ */
 public class CardV extends JComponent implements MouseListener, MouseMotionListener {
 
+	// ATTRIBUTI
 	// private int player;
 	private Color mainColor;
 	private Color sidesColor;
-	// private BufferedImage(?) image;
+	private BufferedImage image;
 	private boolean isVisible = true;
 
-	public CardV(Color mainColor, Color sidesColor, boolean isClickable) {
+	// COSTRUTTORI
+	public CardV(Color mainColor, Color sidesColor, boolean isClickable, BufferedImage image) {
 		this.setMainColor(mainColor);
 		this.setSidesColor(sidesColor);
-
+		this.image = image;
 		if (isClickable) {
 			this.addMouseListener(this);
 			this.addMouseMotionListener(this);
@@ -31,7 +43,7 @@ public class CardV extends JComponent implements MouseListener, MouseMotionListe
 
 	/**
 	 * Costruttore realizzato ad hoc per le carte che occupano le posizioni angolari
-	 * della board
+	 * della board, in quanto queste non verranno visualizzate.
 	 * 
 	 * @param isVisible: boolean
 	 */
@@ -39,14 +51,23 @@ public class CardV extends JComponent implements MouseListener, MouseMotionListe
 		this.isVisible = isVisible;
 	}
 
+	// METODI
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2.setStroke(new BasicStroke(4f));
 
-		g2.setColor(getMainColor());
-		g2.fillRect(0, 0, getWidth(), getHeight());
+		/*
+		 * Qualora la carta in questione abbia un'immagine questa viene disegnata,
+		 * altrimenti la view base della carta è rappresentata
+		 */
+		if (this.image != null) {
+			g2.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+		} else {
+			g2.setColor(getMainColor());
+			g2.fillRect(0, 0, getWidth(), getHeight());
+		}
 		g2.setColor(getSidesColor());
 		g2.drawRect(+2, +2, getWidth() - 4, getHeight() - 4);
 	}
@@ -75,10 +96,33 @@ public class CardV extends JComponent implements MouseListener, MouseMotionListe
 		this.sidesColor = sidesColor;
 	}
 
+	public BufferedImage getImage() {
+		return image;
+	}
+
+	public void setImage(BufferedImage image) {
+		this.image = image;
+	}
+
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		System.out.println("I'm clickable!");
-
+		//QUESTA CONDIZIONE VUOTA è NECESSARIA PERCHè NEL CASO IN CUI
+		//ENTRAMBE LE IMMAGINI NON SONO NULLE HO UNA TRANSIZIONE DELLE CARTE
+		//E QUESTO VIENE GESTITO DALLA BOARD
+		if (this.image != null && MatchV.selectedCard.getImage() != null) {
+			System.out.println("4");
+		} else if (this.image != null) {
+			MatchV.selectedCard.setSelected(true);
+			MatchV.selectedCard.setImage(this.image);
+			this.image = null;
+		} else if (MatchV.selectedCard.getImage() != null) {
+			this.image = MatchV.selectedCard.getImage();
+			MatchV.selectedCard.deselected();
+		}
+		// Questo repaint è importante altrimenti alcune zone della carta non vengono
+		// aggiornate
+		// qualora le carte in PlayerV e BoardV siano di dimensioni diverse
+		this.repaint();
 	}
 
 	@Override
@@ -112,14 +156,22 @@ public class CardV extends JComponent implements MouseListener, MouseMotionListe
 	}
 
 	@Override
+	/**
+	 * Permette di tenere traccia di dove è posizionato il muose RISPETTO ALLO
+	 * SCHERMO quando si trova su un oggetto della classe CardV. In questo modo
+	 * posso rappresentare e muovere la carta selezionata o il puntatore qualore
+	 * nessuna carta sia stata precedentemente scelta.
+	 */
 	public void mouseMoved(MouseEvent e) {
-		// TODO Auto-generated method stub
+		// Questo valore e i suoi derivati hanno solo fini estetici
+		int l = Math.min(MatchV.frame.getContentPane().getHeight(), MatchV.frame.getContentPane().getWidth());
 		if (MatchV.selectedCard.isSelected()) {
-			MatchV.selectedCard.setBounds((int) (MatchV.frame.getContentPane().getMousePosition().getX() - 50),
-					(int) (MatchV.frame.getContentPane().getMousePosition().getY() - 50), 100, 100);
+			MatchV.selectedCard.setBounds((int) (MatchV.frame.getContentPane().getMousePosition().getX() - l / 30),
+					(int) (MatchV.frame.getContentPane().getMousePosition().getY() - l / 30), l / 15, l / 15);
+			MatchV.selectedCard.setSidesColor(Color.ORANGE);
 		} else {
-			MatchV.selectedCard.setBounds((int) (MatchV.frame.getContentPane().getMousePosition().getX() - 10),
-					(int) (MatchV.frame.getContentPane().getMousePosition().getY() - 10), 20, 20);
+			MatchV.selectedCard.setBounds((int) (MatchV.frame.getContentPane().getMousePosition().getX() - l / 100),
+					(int) (MatchV.frame.getContentPane().getMousePosition().getY() - l / 100), l / 50, l / 50);
 		}
 		MatchV.selectedCard.repaint();
 	}

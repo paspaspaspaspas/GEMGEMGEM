@@ -1,0 +1,17 @@
+PROBLEMI
+
+-> Quando clicchi su una carta e rimani perfettamente fermo la carta selezionata non viene rappresentata.
+-> Se la finestra assume dimensioni particolarmente sproporzionate la selected card diventa più grande delle carte stesse.
+-> Quando hoveri una carta con immagine sulla board ogni tanto l'immagine sfarfalla un po'
+
+IDEE
+
+-> Impedire che la stessa carta sia estratta più volte
+
+TODO
+
+-> Al momento del click avviene lo spostamento delle carte
+		Ora le carte si muovono ma solamente verso l'alto.
+		Usa e.getPoint() che ti dà la posizione del mouse all'interno del componente(spero la singola carta)
+		in modo da determinare la direzione.
+		Può essere un'idea creare una classe enumerazione per definire i triangoli o qualcosa del genere???

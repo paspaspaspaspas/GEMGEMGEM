@@ -18,8 +18,16 @@ import java.awt.event.MouseMotionListener;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 
-public class MatchV implements MouseMotionListener, MouseListener {
+/**
+ * Racchiude tutti gli elementi che fanno parte della componente View del
+ * progetto.
+ * 
+ * @author pasos
+ *
+ */
+public class MatchV implements MouseMotionListener {
 
+	// ATTRIBUTI
 	static JFrame frame;
 	private JPanel panel;
 
@@ -62,7 +70,7 @@ public class MatchV implements MouseMotionListener, MouseListener {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		selectedCard = new SelectedCardV();
-		selectedCard.setBounds(100, 100, 100, 100);
+		selectedCard.setBounds(1, 1, 1, 1);
 		frame.getContentPane().add(selectedCard);
 
 		panel = new JPanel();
@@ -70,7 +78,7 @@ public class MatchV implements MouseMotionListener, MouseListener {
 		panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
 		frame.getContentPane().add(panel);
 
-		player1 = new PlayerV();
+		player1 = new PlayerV(0);
 		player1.setBounds(0, 0, (int) (frame.getWidth() * 0.2), frame.getHeight());
 		panel.add(player1);
 
@@ -78,12 +86,12 @@ public class MatchV implements MouseMotionListener, MouseListener {
 		board.setBounds((int) (frame.getWidth() * 0.2), 0, (int) (frame.getWidth() * 0.6), frame.getHeight());
 		panel.add(board);
 
-		player2 = new PlayerV();
+		player2 = new PlayerV(1);
 		player2.setBounds((int) (frame.getWidth() * 0.8), 0, (int) (frame.getWidth() * 0.2), frame.getHeight());
 		panel.add(player2);
 
 		frame.getContentPane().addMouseMotionListener(this);
-		frame.getContentPane().addMouseListener(this);
+		// frame.getContentPane().addMouseListener(this);
 	}
 
 	@Override
@@ -92,46 +100,22 @@ public class MatchV implements MouseMotionListener, MouseListener {
 	}
 
 	@Override
+	/**
+	 * Mi permette di tenere traccia della posizione del mouse rispetto alla
+	 * finestra. In questo modo muovo la carta selezionata o il cursore qualora
+	 * nessuna carta sia stata scelta in precedenza.
+	 */
 	public void mouseMoved(MouseEvent e) {
+		int l = Math.min(frame.getWidth(), frame.getHeight());
 		if (selectedCard.isSelected()) {
-			selectedCard.setBounds((int) (e.getPoint().getX() - 50), (int) (e.getPoint().getY() - 50), 100, 100);
-		}else {
-			selectedCard.setBounds((int) (e.getPoint().getX() - 10), (int) (e.getPoint().getY() - 10), 20, 20);
+			selectedCard.setBounds((int) (e.getPoint().getX() - l / 30), (int) (e.getPoint().getY() - l / 30), l / 15,
+					l / 15);
+			selectedCard.setSidesColor(Color.MAGENTA);
+		} else {
+			selectedCard.setBounds((int) (e.getPoint().getX() - l / 100), (int) (e.getPoint().getY() - l / 100), l / 50,
+					l / 50);
 		}
 		selectedCard.repaint();
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		selectedCard.setSelected(!selectedCard.isSelected());
-		mouseMoved(e);
-		
-		//TODO NON MI SEMBRA CHE SENTA SEMPRE IL CLICK
-		System.out.println("I hear you mate");
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 }
