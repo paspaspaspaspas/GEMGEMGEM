@@ -81,11 +81,11 @@ public class MatchV implements MouseMotionListener {
 		player1 = new PlayerV(0);
 		player1.setBounds(0, 0, (int) (frame.getWidth() * 0.2), frame.getHeight());
 		panel.add(player1);
-
+		
 		board = new BoardV();
 		board.setBounds((int) (frame.getWidth() * 0.2), 0, (int) (frame.getWidth() * 0.6), frame.getHeight());
 		panel.add(board);
-
+		
 		player2 = new PlayerV(1);
 		player2.setBounds((int) (frame.getWidth() * 0.8), 0, (int) (frame.getWidth() * 0.2), frame.getHeight());
 		panel.add(player2);

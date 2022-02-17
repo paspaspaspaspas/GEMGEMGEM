@@ -8,6 +8,7 @@ import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.Random;
 
 import javax.swing.JComponent;
 
@@ -23,7 +24,8 @@ public class BoardV extends JComponent implements MouseListener {
 	// ATTRIBUTI
 	private int cardsPerSides = 5;
 	private int dimCard;
-	public CardV[][] cards;
+	public static CardV[][] cards;
+	public static BoardCardV[] cardsWithGems = new BoardCardV[3];
 
 	// COSTRUTTORE
 	public BoardV() {
@@ -46,6 +48,12 @@ public class BoardV extends JComponent implements MouseListener {
 				this.add(cards[i][j]);
 			}
 		}
+		
+		int[][] gems = createGems();
+		for(int i = 0; i < 3; i++) {
+			((BoardCardV) cards[gems[i][0] + 1][gems[i][1] + 1]).setHasGem(true);
+			cardsWithGems[i] = ((BoardCardV) cards[gems[i][0] + 1][gems[i][1] + 1]);
+		}
 
 		for (CardV[] cardRow : cards) {
 			for (CardV card : cardRow) {
@@ -54,6 +62,30 @@ public class BoardV extends JComponent implements MouseListener {
 				}
 			}
 		}
+	}
+
+	private int[][] createGems() {
+		Random random = new Random();
+		int[][] gems = {{-1, -1}, {-1, -1}, {-1, -1}};
+		int gemNumber = 0;
+		do {
+			int x = random.nextInt(3);
+			int y = random.nextInt(3);
+			boolean newGem = true;
+			for(int i = 0; i < gemNumber; i++) {
+				if(gems[i][0] == x && gems[i][1] == y) {
+					newGem = false;
+					break;
+				}
+			}
+			if(newGem) {
+				System.out.println(gemNumber);
+				gems[gemNumber][0] = x;
+				gems[gemNumber][1] = y;
+				gemNumber++;
+			}
+		}while (gemNumber < 3);
+		return gems;
 	}
 
 	// METODI
@@ -82,15 +114,28 @@ public class BoardV extends JComponent implements MouseListener {
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		BoardCardV cardClicked = (BoardCardV) e.getComponent();
+		Point mousePosition = e.getPoint();
 		System.out.println("1");
 		if (MatchV.selectedCard.getImage() != null && cardClicked.getImage() != null) {
 			System.out.println("2");
-			//Non è necessario controllare carte che non siano BoardCardV
+			// Non è necessario controllare carte che non siano BoardCardV
 			for (int i = 1; i < cardsPerSides - 1; i++) {
 				for (int j = 1; j < cardsPerSides - 1; j++) {
 					if (cardClicked == cards[i][j]) {
 						System.out.println("3");
-						cards[i][j - 1].setImage(cards[i][j].getImage());
+						switch (cardClicked.whichTriangle(mousePosition)) {
+						case UP:
+							cards[i][j + 1].setImage(cards[i][j].getImage());
+							break;
+						case RIGHT:
+							cards[i - 1][j].setImage(cards[i][j].getImage());
+							break;
+						case DOWN:
+							cards[i][j - 1].setImage(cards[i][j].getImage());
+							break;
+						default:
+							cards[i + 1][j].setImage(cards[i][j].getImage());
+						}
 						cards[i][j].setImage(MatchV.selectedCard.getImage());
 						MatchV.selectedCard.deselected();
 					}

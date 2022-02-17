@@ -4,6 +4,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +20,7 @@ import javax.swing.JComponent;
  * @author pasos
  *
  */
-public class PlayerV extends JComponent {
+public class PlayerV extends JComponent implements MouseListener{
 
 	// ATTRIBUTI
 	private int cardsPerPlayerSide = 5;
@@ -49,6 +51,7 @@ public class PlayerV extends JComponent {
 				this.add(cards[i]);
 			}
 		}
+		
 	}
 
 	// METODI
@@ -57,6 +60,17 @@ public class PlayerV extends JComponent {
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		setCellsPositions();
+		
+		//AGGIUNGO QUI I MOUSE LISTENER PERCHè HO BISOGNO CHE LA BOARDV SIA GIà STATA
+		//INIZIALIZZATA ALTRIMENTI BOARDV.CARDS == NULL.
+		
+		for (CardV[] cardRow : BoardV.cards) {
+			for (CardV card : cardRow) {
+				if (card instanceof BoardCardV) {
+					card.addMouseListener(this);
+				}
+			}
+		}
 	}
 
 	/**
@@ -84,5 +98,40 @@ public class PlayerV extends JComponent {
 		Random rand = new Random();
 		int i = rand.nextInt(EnumCards.values().length);
 		return EnumCards.values()[i];
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		for(CardV card : cards) {
+			if(card instanceof BenchCardV && card.getImage() == null) {
+				card.setImage(estrai().getImage());
+				card.repaint();
+			}
+		}
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }
