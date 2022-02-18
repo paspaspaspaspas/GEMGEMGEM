@@ -1,4 +1,4 @@
-package gemgemgem.view;
+package gemgemgem;
 
 import java.awt.image.BufferedImage;
 import java.io.File;

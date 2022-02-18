@@ -11,6 +11,8 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.Random;
 
+import gemgemgem.EnumCards;
+
 /**
  * Rappresenta la view una carta generica posizionata sul terreno di gioco.
  * 
@@ -33,10 +35,12 @@ public class BoardCardV extends CardV implements MouseListener, MouseMotionListe
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2.setStroke(new BasicStroke(4f));
-		
-		if(hasGem) {
+
+		if (hasGem) {
 			g2.setColor(Color.GREEN);
-			g2.fillRect(this.getWidth()/ 3, this.getHeight() / 3, this.getWidth()/ 3, this.getHeight() / 3);
+			g2.fillOval(this.getWidth() / 3, this.getHeight() * 3 / 10, this.getWidth() / 3, this.getHeight() * 2 / 5);
+			g2.setColor(Color.BLUE);
+			g2.drawOval(this.getWidth() / 3, this.getHeight() * 3 / 10, this.getWidth() / 3, this.getHeight() * 2 / 5);
 		}
 
 		// QUESTA CONDIZIONE SI PUO' MIGLIORARE?
@@ -45,7 +49,7 @@ public class BoardCardV extends CardV implements MouseListener, MouseMotionListe
 		}
 
 	}
-	
+
 	public boolean hasGem() {
 		return hasGem;
 	}

@@ -8,6 +8,8 @@ import java.awt.RenderingHints;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
+import gemgemgem.EnumCards;
+
 /**
  * Rappresenta la view della carta selezionata dall'utente.
  * Qualora nessuna carta sia stata selezionata rappresenta un puntatore.

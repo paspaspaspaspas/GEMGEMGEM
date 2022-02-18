@@ -13,6 +13,8 @@ import java.util.Random;
 
 import javax.swing.JComponent;
 
+import gemgemgem.EnumCards;
+
 /**
  * Rappresenta la view del terreno di gioco. Al momento dell'inizializzazione la
  * board è completamente vuota, pertanto riempita con carte generiche.
@@ -140,38 +142,34 @@ public class BoardV extends JComponent implements MouseListener {
 		boolean isAllowed = true;
 		switch (direction) {
 		case UP:
+			if(j == 4) return false;
 			if (j < 5 && cards[i][j + 1].getCard() != null) {
 				isAllowed = moveIsAllowed(i, j + 1, EnumTriangle.UP, card);
 			}
-			System.out.printf("selectedcard: %d", card.getArrows()[EnumTriangle.UP.getIndex()]);
-			System.out.printf("boardcard: %d", cards[i][j].getCard().getArrows()[EnumTriangle.DOWN.getIndex()]);
 			return (card.getArrows()[EnumTriangle.UP.getIndex()] > cards[i][j].getCard().getArrows()[EnumTriangle.DOWN
 					.getIndex()] && isAllowed) ? true : false;
 
 		case RIGHT:
+			if(i == 0) return false;
 			if (i > 0 && cards[i - 1][j].getCard() != null) {
 				isAllowed = moveIsAllowed(i - 1, j, EnumTriangle.RIGHT, card);
 			}
-			System.out.printf("selectedcard: %d", card.getArrows()[EnumTriangle.RIGHT.getIndex()]);
-			System.out.printf("boardcard: %d", cards[i][j].getCard().getArrows()[EnumTriangle.LEFT.getIndex()]);
 			return (card.getArrows()[EnumTriangle.RIGHT.getIndex()] > cards[i][j].getCard()
 					.getArrows()[EnumTriangle.LEFT.getIndex()] && isAllowed) ? true : false;
 
 		case DOWN:
+			if(j == 0) return false;
 			if (j > 0 && cards[i][j - 1].getCard() != null) {
 				isAllowed = moveIsAllowed(i, j - 1, EnumTriangle.DOWN, card);
 			}
-			System.out.printf("selectedcard: %d", card.getArrows()[EnumTriangle.DOWN.getIndex()]);
-			System.out.printf("boardcard: %d", cards[i][j].getCard().getArrows()[EnumTriangle.UP.getIndex()]);
 			return (card.getArrows()[EnumTriangle.DOWN.getIndex()] > cards[i][j].getCard().getArrows()[EnumTriangle.UP
 					.getIndex()] && isAllowed) ? true : false;
 
 		default:
+			if(i == 4) return false;
 			if (i < 5 && cards[i + 1][j].getCard() != null) {
 				isAllowed = moveIsAllowed(i + 1, j, EnumTriangle.LEFT, card);
 			}
-			System.out.printf("selectedcard: %d", card.getArrows()[EnumTriangle.LEFT.getIndex()]);
-			System.out.printf("boardcard: %d", cards[i][j].getCard().getArrows()[EnumTriangle.RIGHT.getIndex()]);
 			return (card.getArrows()[EnumTriangle.LEFT.getIndex()] > cards[i][j].getCard()
 					.getArrows()[EnumTriangle.RIGHT.getIndex()] && isAllowed) ? true : false;
 		}

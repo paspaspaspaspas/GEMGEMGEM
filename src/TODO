@@ -4,6 +4,8 @@ PROBLEMI
 -> Se la finestra assume dimensioni particolarmente sproporzionate la selected card diventa più grande delle carte stesse.
 -> Quando hoveri una carta con immagine sulla board ogni tanto l'immagine sfarfalla un po'
 -> In PlayerV non aggiungo il mouseListener nel costruttore, ma in un metodo. Posso trovare un modo per metterlo nel costruttore?
+-> Quando ti occupi del movimento delle carte c'è un po' di codice ripetuto per gestire le 4 direzioni.
+-> Implementa metodo che aggiorni la card e la image allo stesso tempo perchè hai un tot di codice duplicato
 
 IDEE
 
@@ -11,5 +13,3 @@ IDEE
 
 TODO
 
--> Se provi a posizionare una carta che spingerebbe un'altra fuori dallo schermo il programma salta.
--> Implementa metodo che aggiorni la card e la image allo stesso tempo perchè hai un tot di codice duplicato

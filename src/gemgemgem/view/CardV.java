@@ -14,6 +14,8 @@ import java.io.File;
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 
+import gemgemgem.EnumCards;
+
 /**
  * Rappresenta le caratteristiche base di una carta del gioco, comuni a
  * prescindere dal posizionamento della stessa.
@@ -132,9 +134,7 @@ public class CardV extends JComponent implements MouseListener, MouseMotionListe
 		if (this.image != null && MatchV.selectedCard.getImage() != null) {
 			return;
 		} else if (this.image != null) {
-			System.out.println(this.card.toString());
 			MatchV.selectedCard.selected(this.image, this.card);
-			System.out.println(MatchV.selectedCard.getCard().toString());
 			this.image = null;
 			this.card = null;
 		} else if (MatchV.selectedCard.getImage() != null) {

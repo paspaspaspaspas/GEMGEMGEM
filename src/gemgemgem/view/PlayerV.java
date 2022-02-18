@@ -14,6 +14,9 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 
+import gemgemgem.EnumCards;
+import gemgemgem.EnumImagesUtility;
+
 /**
  * Rappresenta la view della zona di competenza esclusiva di ciascun giocatore.
  * 

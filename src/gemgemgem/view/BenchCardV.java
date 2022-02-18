@@ -3,6 +3,8 @@ package gemgemgem.view;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
+import gemgemgem.EnumCards;
+
 /**
  * Rappresenta la view di una carta generica posizionata sulla panchina di un giocatore.
  * 
