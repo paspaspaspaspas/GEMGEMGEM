@@ -24,16 +24,28 @@ import javax.swing.JComponent;
 public class CardV extends JComponent implements MouseListener, MouseMotionListener {
 
 	// ATTRIBUTI
-	// private int player;
 	private Color mainColor;
 	private Color sidesColor;
 	private BufferedImage image;
 	private boolean isVisible = true;
+	private EnumCards card;
 
 	// COSTRUTTORI
+	public CardV(Color mainColor, Color sidesColor, boolean isClickable, EnumCards card) {
+		this.setMainColor(mainColor);
+		this.setSidesColor(sidesColor);
+		this.card = card;
+		this.image = this.card != null ? this.card.getImage() : null;
+		if (isClickable) {
+			this.addMouseListener(this);
+			this.addMouseMotionListener(this);
+		}
+	}
+	
 	public CardV(Color mainColor, Color sidesColor, boolean isClickable, BufferedImage image) {
 		this.setMainColor(mainColor);
 		this.setSidesColor(sidesColor);
+		this.card = null;
 		this.image = image;
 		if (isClickable) {
 			this.addMouseListener(this);
@@ -49,6 +61,14 @@ public class CardV extends JComponent implements MouseListener, MouseMotionListe
 	 */
 	public CardV(boolean isVisible) {
 		this.isVisible = isVisible;
+	}
+	
+	public EnumCards getCard() {
+		return card;
+	}
+
+	public void setCard(EnumCards card) {
+		this.card = card;
 	}
 
 	// METODI
@@ -110,13 +130,16 @@ public class CardV extends JComponent implements MouseListener, MouseMotionListe
 		//ENTRAMBE LE IMMAGINI NON SONO NULLE HO UNA TRANSIZIONE DELLE CARTE
 		//E QUESTO VIENE GESTITO DALLA BOARD
 		if (this.image != null && MatchV.selectedCard.getImage() != null) {
-			System.out.println("4");
+			return;
 		} else if (this.image != null) {
-			MatchV.selectedCard.setSelected(true);
-			MatchV.selectedCard.setImage(this.image);
+			System.out.println(this.card.toString());
+			MatchV.selectedCard.selected(this.image, this.card);
+			System.out.println(MatchV.selectedCard.getCard().toString());
 			this.image = null;
+			this.card = null;
 		} else if (MatchV.selectedCard.getImage() != null) {
 			this.image = MatchV.selectedCard.getImage();
+			this.card = MatchV.selectedCard.getCard();
 			MatchV.selectedCard.deselected();
 		}
 		// Questo repaint è importante altrimenti alcune zone della carta non vengono

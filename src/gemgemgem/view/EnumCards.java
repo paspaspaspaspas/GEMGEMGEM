@@ -16,7 +16,7 @@ public enum EnumCards {
 	AXOLONGL(new int[] {0, 3, 0, 3}),
 	BARDSPRITE(new int[] {1, 1, 1, 0}),
 	BARTON(new int[] {0, 1, 1, 2}),
-	BEETO(new int[] {0, 0, 1, 0}),
+	BEETO(new int[] {0, 1, 0, 0}),
 	BIGBOHTO(new int[] {2, 2, 0, 2}),
 	BLACKKNIGHT(new int[] {0, 1, 2, 1}),
 	BLITZSTEED(new int[] {0, 0, 0, 1}),

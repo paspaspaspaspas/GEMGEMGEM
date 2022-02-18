@@ -11,4 +11,5 @@ IDEE
 
 TODO
 
--> Devi riuscire a far muovere più carte in sequenza
+-> Se provi a posizionare una carta che spingerebbe un'altra fuori dallo schermo il programma salta.
+-> Implementa metodo che aggiorni la card e la image allo stesso tempo perchè hai un tot di codice duplicato

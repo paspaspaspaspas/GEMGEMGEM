@@ -12,6 +12,6 @@ public class GraveyardCardV extends CardV{
 	
 	//COSTRUTTORE
 	public GraveyardCardV() {
-		super(Color.GRAY, Color.DARK_GRAY, false, null);
+		super(Color.GRAY, Color.DARK_GRAY, false, (EnumCards) null);
 	}
 }

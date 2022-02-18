@@ -38,7 +38,7 @@ public class PlayerV extends JComponent implements MouseListener{
 				} else if (i == cardsPerPlayerSide - 1)
 					cards[i] = new DeckCardV(EnumImagesUtility.BLUE_BACK.getImage());
 				else
-					cards[i] = new BenchCardV(estrai().getImage());
+					cards[i] = new BenchCardV(estrai());
 				this.add(cards[i]);
 			}
 		} else {
@@ -103,8 +103,9 @@ public class PlayerV extends JComponent implements MouseListener{
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		for(CardV card : cards) {
-			if(card instanceof BenchCardV && card.getImage() == null) {
-				card.setImage(estrai().getImage());
+			if(card instanceof BenchCardV && card.getCard() == null) {
+				card.setCard(estrai());
+				card.setImage(card.getCard().getImage());
 				card.repaint();
 			}
 		}

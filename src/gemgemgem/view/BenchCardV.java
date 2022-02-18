@@ -12,8 +12,8 @@ import java.awt.image.BufferedImage;
 public class BenchCardV extends CardV{
 	
 	//COSTRUTTORE
-	public BenchCardV(BufferedImage image) {
-		super(Color.YELLOW, Color.ORANGE, true, image);
+	public BenchCardV(EnumCards card) {
+		super(Color.YELLOW, Color.ORANGE, true, card);
 	}
 
 }

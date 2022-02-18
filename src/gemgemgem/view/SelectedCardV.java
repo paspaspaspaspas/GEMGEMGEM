@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
 
 /**
  * Rappresenta la view della carta selezionata dall'utente.
@@ -21,7 +22,7 @@ public class SelectedCardV extends CardV {
 
 	//COSTRUTTORE
 	public SelectedCardV() {
-		super(Color.PINK, Color.MAGENTA, false, null);
+		super(Color.PINK, Color.MAGENTA, false, (EnumCards) null);
 		this.isSelected = false;
 	}
 
@@ -50,6 +51,13 @@ public class SelectedCardV extends CardV {
 	public void deselected() {
 		this.setSelected(false);
 		this.setImage(null);
+		this.setCard(null);
+	}
+	
+	public void selected(BufferedImage image, EnumCards card) {
+		this.setSelected(true);
+		this.setImage(image);
+		this.setCard(card);
 	}
 
 }
