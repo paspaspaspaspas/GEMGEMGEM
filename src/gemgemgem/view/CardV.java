@@ -30,7 +30,8 @@ public class CardV extends JComponent implements MouseListener, MouseMotionListe
 	private Color sidesColor;
 	private BufferedImage image;
 	private boolean isVisible = true;
-	private EnumCards card;
+	protected EnumCards card = null;
+	
 
 	// COSTRUTTORI
 	public CardV(Color mainColor, Color sidesColor, boolean isClickable, EnumCards card) {
@@ -125,22 +126,24 @@ public class CardV extends JComponent implements MouseListener, MouseMotionListe
 	public void setImage(BufferedImage image) {
 		this.image = image;
 	}
+	
+	public void loadCard(EnumCards cardToLoad) {
+		this.setCard(cardToLoad);
+		this.setImage(cardToLoad.getImage());
+	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		//QUESTA CONDIZIONE VUOTA è NECESSARIA PERCHè NEL CASO IN CUI
-		//ENTRAMBE LE IMMAGINI NON SONO NULLE HO UNA TRANSIZIONE DELLE CARTE
-		//E QUESTO VIENE GESTITO DALLA BOARD
+		//Move more than one card with a single action (it's executed by the Board)
 		if (this.image != null && MatchV.selectedCard.getImage() != null) {
 			return;
-		} else if (this.image != null) {
-			MatchV.selectedCard.selected(this.image, this.card);
-			this.image = null;
-			this.card = null;
+		//Deploy the selected card
 		} else if (MatchV.selectedCard.getImage() != null) {
 			this.image = MatchV.selectedCard.getImage();
 			this.card = MatchV.selectedCard.getCard();
 			MatchV.selectedCard.deselected();
+			System.out.println("YOUR TURN IS OVER MATE cit. CardV");
+			MatchV.loadModel();
 		}
 		// Questo repaint è importante altrimenti alcune zone della carta non vengono
 		// aggiornate

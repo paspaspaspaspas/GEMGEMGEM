@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
 import java.util.Random;
 
 import javax.swing.JComponent;
@@ -45,9 +46,11 @@ public class BoardV extends JComponent implements MouseListener {
 						|| (i == cardsPerSides - 1 && j == cardsPerSides - 1))
 					cards[i][j] = new CardV(false);
 				else if (i == 0 || j == 0 || i == cardsPerSides - 1 || j == cardsPerSides - 1)
-					cards[i][j] = new GraveyardCardV();
+					cards[i][j] = new GraveyardCardV(MatchV.matchModel.getBoardCards() == null ? null
+							: MatchV.matchModel.getBoardCards().get(new Integer[] { i, j }));
 				else
-					cards[i][j] = new BoardCardV();
+					cards[i][j] = new BoardCardV(MatchV.matchModel.getBoardCards() == null ? null
+							: MatchV.matchModel.getBoardCards().get(new Integer[] { i, j }));
 				this.add(cards[i][j]);
 			}
 		}
@@ -126,6 +129,8 @@ public class BoardV extends JComponent implements MouseListener {
 						if (moveIsAllowed(i, j, direction, MatchV.selectedCard.getCard())) {
 							moveCards(i, j, direction, MatchV.selectedCard.getCard());
 							MatchV.selectedCard.deselected();
+							System.out.println("YOUR TURN IS OVER MATE cit. BoardV");
+							MatchV.loadModel();
 						} else {
 							System.out.println("SIKE");
 						}
@@ -135,14 +140,33 @@ public class BoardV extends JComponent implements MouseListener {
 
 		}
 		this.repaint();
+		
+		int winner;
+		if((winner = checkWinner()) != -1) {
+			System.out.printf("WINNER: PLAYER%d", winner);
+		}
 
+	}
+
+	private int checkWinner () {
+		boolean gameIsOver = true;
+		int blueCards = 0;
+		for(BoardCardV card : cardsWithGems) {
+			if(card.getCard() == null) gameIsOver = false;
+			else if(card.getCard().getPlayer() == 1) blueCards++;
+		}
+		if(gameIsOver) {
+			return blueCards >= 2 ? 1 : 2;
+		}
+		return -1;
 	}
 
 	private boolean moveIsAllowed(int i, int j, EnumTriangle direction, EnumCards card) {
 		boolean isAllowed = true;
 		switch (direction) {
 		case UP:
-			if(j == 4) return false;
+			if (j == 4)
+				return false;
 			if (j < 5 && cards[i][j + 1].getCard() != null) {
 				isAllowed = moveIsAllowed(i, j + 1, EnumTriangle.UP, card);
 			}
@@ -150,7 +174,8 @@ public class BoardV extends JComponent implements MouseListener {
 					.getIndex()] && isAllowed) ? true : false;
 
 		case RIGHT:
-			if(i == 0) return false;
+			if (i == 0)
+				return false;
 			if (i > 0 && cards[i - 1][j].getCard() != null) {
 				isAllowed = moveIsAllowed(i - 1, j, EnumTriangle.RIGHT, card);
 			}
@@ -158,7 +183,8 @@ public class BoardV extends JComponent implements MouseListener {
 					.getArrows()[EnumTriangle.LEFT.getIndex()] && isAllowed) ? true : false;
 
 		case DOWN:
-			if(j == 0) return false;
+			if (j == 0)
+				return false;
 			if (j > 0 && cards[i][j - 1].getCard() != null) {
 				isAllowed = moveIsAllowed(i, j - 1, EnumTriangle.DOWN, card);
 			}
@@ -166,7 +192,8 @@ public class BoardV extends JComponent implements MouseListener {
 					.getIndex()] && isAllowed) ? true : false;
 
 		default:
-			if(i == 4) return false;
+			if (i == 4)
+				return false;
 			if (i < 5 && cards[i + 1][j].getCard() != null) {
 				isAllowed = moveIsAllowed(i + 1, j, EnumTriangle.LEFT, card);
 			}
@@ -182,32 +209,46 @@ public class BoardV extends JComponent implements MouseListener {
 			if (j < 5 && cards[i][j + 1].getImage() != null) {
 				moveCards(i, j + 1, EnumTriangle.UP, cards[i][j].getCard());
 			}
-			cards[i][j + 1].setCard(cards[i][j].getCard());
-			cards[i][j + 1].setImage(cards[i][j].getImage());
+			cards[i][j + 1].loadCard(cards[i][j].getCard());
 			break;
 		case RIGHT:
 			if (i > 0 && cards[i - 1][j].getImage() != null) {
 				moveCards(i - 1, j, EnumTriangle.RIGHT, cards[i][j].getCard());
 			}
-			cards[i - 1][j].setCard(cards[i][j].getCard());
-			cards[i - 1][j].setImage(cards[i][j].getImage());
+			cards[i - 1][j].loadCard(cards[i][j].getCard());
 			break;
 		case DOWN:
 			if (j > 0 && cards[i][j - 1].getImage() != null) {
 				moveCards(i, j - 1, EnumTriangle.DOWN, cards[i][j].getCard());
 			}
-			cards[i][j - 1].setCard(cards[i][j].getCard());
-			cards[i][j - 1].setImage(cards[i][j].getImage());
+			cards[i][j - 1].loadCard(cards[i][j].getCard());
 			break;
 		default:
 			if (i < 5 && cards[i + 1][j].getImage() != null) {
 				moveCards(i + 1, j, EnumTriangle.LEFT, cards[i][j].getCard());
 			}
-			cards[i + 1][j].setCard(cards[i][j].getCard());
-			cards[i + 1][j].setImage(cards[i][j].getImage());
+
+			cards[i + 1][j].loadCard(cards[i][j].getCard());
 		}
-		cards[i][j].setCard(newCard);
-		cards[i][j].setImage(newCard.getImage());
+		cards[i][j].loadCard(newCard);
+	}
+
+	/**
+	 * 
+	 * 
+	 * ???
+	 * 
+	 * 
+	 */
+	public void aggiornaModel() {
+		HashMap<Integer[], EnumCards> boardCards = new HashMap<>();
+		for (int i = 0; i < 5; i++) {
+			for (int j = 0; j < 5; j++) {
+				boardCards.put(new Integer[] { i, j }, cards[i][j].getCard());
+			}
+		}
+		MatchV.matchModel.setBoardCards(boardCards);
+		System.out.println("BoardCards aggiornate");
 	}
 
 	@Override
@@ -232,6 +273,17 @@ public class BoardV extends JComponent implements MouseListener {
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
 
+	}
+
+	public HashMap<Integer[], EnumCards> getCards() {
+		HashMap<Integer[], EnumCards> cardsToLoad = new HashMap<>();
+		for(int i = 0; i < 5; i++) {
+			for(int j = 0; j < 5; j++) {
+				cardsToLoad.put(new Integer[] {i, j}, cards[i][j].getCard());
+			}
+		}
+		
+		return cardsToLoad;
 	}
 
 }

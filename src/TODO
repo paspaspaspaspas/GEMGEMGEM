@@ -5,11 +5,16 @@ PROBLEMI
 -> Quando hoveri una carta con immagine sulla board ogni tanto l'immagine sfarfalla un po'
 -> In PlayerV non aggiungo il mouseListener nel costruttore, ma in un metodo. Posso trovare un modo per metterlo nel costruttore?
 -> Quando ti occupi del movimento delle carte c'è un po' di codice ripetuto per gestire le 4 direzioni.
--> Implementa metodo che aggiorni la card e la image allo stesso tempo perchè hai un tot di codice duplicato
+-> In alcuni metodi vecchi, come quelli per il movimento e la selezione delle carte si nota la confusione
+	tra l'essenza della carta e l'immagine della carta. Meglio se le sistemi
 
 IDEE
 
--> Impedire che la stessa carta sia estratta più volte
-
 TODO
 
+							STAI SPERIMENTANDO! NON COMMITTARE!!!
+-> Quando ricevo un model si aggiornano i valori delle EnumCards oppure come fanno a coesistere?
+-> Implementare la divisione a turni, ma credo sia successiva alla parte di Network
+-> La determinazione del vincitore ora c'è, ma avviene nella boardV e non sono sicuro che debba stare lì.
+
+	

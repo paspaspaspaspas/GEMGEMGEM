@@ -13,7 +13,7 @@ import gemgemgem.EnumCards;
 public class GraveyardCardV extends CardV{
 	
 	//COSTRUTTORE
-	public GraveyardCardV() {
-		super(Color.GRAY, Color.DARK_GRAY, false, (EnumCards) null);
+	public GraveyardCardV(EnumCards card) {
+		super(Color.GRAY, Color.DARK_GRAY, false, card);
 	}
 }

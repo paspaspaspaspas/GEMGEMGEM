@@ -26,8 +26,8 @@ public class BoardCardV extends CardV implements MouseListener, MouseMotionListe
 	Point mousePosition;
 
 	// COSTRUTTORE
-	public BoardCardV() {
-		super(Color.CYAN, Color.BLUE, true, (EnumCards) null);
+	public BoardCardV(EnumCards card) {
+		super(Color.CYAN, Color.BLUE, true, card);
 	}
 
 	protected void paintComponent(Graphics g) {

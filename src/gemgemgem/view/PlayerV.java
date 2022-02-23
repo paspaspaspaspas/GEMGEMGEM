@@ -9,6 +9,7 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
@@ -23,38 +24,31 @@ import gemgemgem.EnumImagesUtility;
  * @author pasos
  *
  */
-public class PlayerV extends JComponent implements MouseListener{
+public class PlayerV extends JComponent implements MouseListener {
 
 	// ATTRIBUTI
 	private int cardsPerPlayerSide = 5;
 	private int dimCards;
+	
 	public CardV[] cards;
+	private int player;
 
 	// COSTRUTTORE
 	public PlayerV(int player) {
+		this.player = player;
 		setPreferredSize(new Dimension(125, 500));
 		cards = new CardV[cardsPerPlayerSide];
-		if (player == 0) {
-			for (int i = 0; i < cardsPerPlayerSide; i++) {
-				if (i == 0) {
-					cards[i] = new IconCardV(EnumImagesUtility.ICON1.getImage());
-				} else if (i == cardsPerPlayerSide - 1)
-					cards[i] = new DeckCardV(EnumImagesUtility.BLUE_BACK.getImage());
-				else
-					cards[i] = new BenchCardV(estrai());
-				this.add(cards[i]);
-			}
-		} else {
-			for (int i = 0; i < cardsPerPlayerSide; i++) {
-				if (i == 0) {
-					cards[i] = new IconCardV(EnumImagesUtility.ICON2.getImage());
-				} else {	
-					cards[i] = new DeckCardV(EnumImagesUtility.RED_BACK.getImage());
-				}
-				this.add(cards[i]);
-			}
+		for (int i = 0; i < cardsPerPlayerSide; i++) {
+			if (i == 0) {
+				cards[i] = new IconCardV(player);
+			} else if (i == cardsPerPlayerSide - 1)
+				cards[i] = new DeckCardV(player);
+			else
+				cards[i] = new BenchCardV(player == 1 ? MatchV.matchModel.getP1Cards().get(i)
+						: MatchV.matchModel.getP2Cards().get(i));
+			this.add(cards[i]);
 		}
-		
+
 	}
 
 	// METODI
@@ -63,10 +57,10 @@ public class PlayerV extends JComponent implements MouseListener{
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		setCellsPositions();
-		
-		//AGGIUNGO QUI I MOUSE LISTENER PERCHè HO BISOGNO CHE LA BOARDV SIA GIà STATA
-		//INIZIALIZZATA ALTRIMENTI BOARDV.CARDS == NULL.
-		
+
+		// AGGIUNGO QUI I MOUSE LISTENER PERCHè HO BISOGNO CHE LA BOARDV SIA GIà STATA
+		// INIZIALIZZATA ALTRIMENTI BOARDV.CARDS == NULL.
+
 		for (CardV[] cardRow : BoardV.cards) {
 			for (CardV card : cardRow) {
 				if (card instanceof BoardCardV) {
@@ -96,46 +90,76 @@ public class PlayerV extends JComponent implements MouseListener{
 			}
 		}
 	}
-	
+
 	public static EnumCards estrai() {
 		Random rand = new Random();
-		int i = rand.nextInt(EnumCards.values().length);
-		return EnumCards.values()[i];
+		EnumCards card;
+		do {
+			int i = rand.nextInt(EnumCards.values().length);
+			card = EnumCards.values()[i];
+		}while(card.getPlayer() != -1);
+		card.setPlayer(1);
+		return card;
+	}
+	
+	/**
+	 * 
+	 * 
+	 * ???
+	 * 
+	 * 
+	 */
+	public void aggiornaModel() {
+		HashMap<Integer, EnumCards> playerCards = new HashMap<>();
+		for(int i = 1; i <= 3; i++) {
+			playerCards.put(i, cards[i].getCard());
+		}
+		if(this.player == 1) MatchV.matchModel.setP1Cards(playerCards);
+		else MatchV.matchModel.setP2Cards(playerCards);
+		System.out.println("PlayerCards aggiornate");
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		for(CardV card : cards) {
-			if(card instanceof BenchCardV && card.getCard() == null) {
+		for (CardV card : cards) {
+			if (card instanceof BenchCardV && card.getCard() == null && MatchV.selectedCard.getImage() == null) {
 				card.setCard(estrai());
 				card.setImage(card.getCard().getImage());
 				card.repaint();
 			}
 		}
-		
+
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	public HashMap<Integer, EnumCards> getCards() {
+		HashMap<Integer, EnumCards> cardsToLoad = new HashMap<>();
+		for(int i = 1; i <= 3; i++) {
+			cardsToLoad.put(i, cards[i].getCard());
+		}
+		return cardsToLoad;
 	}
 }

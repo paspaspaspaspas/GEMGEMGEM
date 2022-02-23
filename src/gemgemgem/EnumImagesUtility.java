@@ -10,7 +10,8 @@ public enum EnumImagesUtility {
 	RED_BACK("RedCardBack"),
 	BLUE_BACK("BlueCardBack"),
 	ICON1("King_Knight_Ultimate_Supreme_Portrait"),
-	ICON2("King_Knight_Mirror_Portrait");
+	ICON2("King_Knight_Mirror_Portrait"),
+	TABLE("table");
 	
 	private String name;
 	

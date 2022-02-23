@@ -31,28 +31,86 @@ public enum EnumCards {
 	DOE(new int[] {1, 1, 0, 2}),
 	DOZEDRAKE(new int[] {1, 0, 0, 1}),
 	DUELISTDI(new int[] {1, 0, 0, 2}),
-	EDGEFARMER(new int[] {3, 3, 0, 3});
+	EDGEFARMER(new int[] {3, 3, 0, 3}),
+	FAIRY(new int[] {0, 0, 0, 2}),
+	FARRELS(new int[] {0, 2, 0, 1}),
+	FLAILARMOR(new int[] {1, 1, 1, 1}),
+	FLAREY(new int[] {3, 3, 0, 0}),
+	FLEETO(new int[] {1, 1, 0, 0}),
+	GASTRONOMER(new int[] {0, 1, 2, 0}),
+	GOATICIAN(new int[] {0, 2, 1, 0}),
+	GOUACHE(new int[] {2, 1, 1, 0}),
+	GRANDMASWAMP(new int[] {1, 2, 0, 1}),
+	GRAPPS(new int[] {2, 0, 2, 0}),
+	GRIFFOTH(new int[] {1, 1, 1, 0}),
+	HEDGEFARMER(new int[] {0, 1, 0, 2}),
+	HEDGEPUPIL(new int[] {2, 0, 0, 1}),
+	HENGINEER(new int[] {2, 1, 0, 1}),
+	HOOPKID(new int[] {1, 1, 2, 0}),
+	HOPPICLES(new int[] {0, 2, 0, 2}),
+	INVISISHADE(new int[] {0, 0, 1, 1}),
+	JUMBOLORB(new int[] {2, 2, 2, 0}),
+	LEDGEFARMER(new int[] {2, 1, 0, 0}),
+	LIQUIDSAMURAIARCHER(new int[] {0, 3, 3, 0}),
+	LIQUIDSAMURAIREAVER(new int[] {3, 0, 0, 3}),
+	LIQUIDSAMURAISWORDSMAN(new int[] {0, 0, 3, 3}),
+	MACAWBE(new int[] {0, 0, 2, 2}),
+	MANNY(new int[] {3, 3, 3, 0}),
+	MEMMEC(new int[] {2, 2, 0, 0}),
+	MISSY(new int[] {0, 3, 3, 3}),
+	MOLEMINION(new int[] {2, 0, 2, 2}),
+	PLAYINGKID(new int[] {2, 0, 1, 1}),
+	PROPELLERRAT(new int[] {1, 0, 0, 0}),
+	RATKING(new int[] {2, 0, 0, 0}),
+	RUFFIAN(new int[] {0, 0, 2, 1}),
+	SERPRIZE(new int[] {0, 2, 2, 0}),
+	SHOVELSMITH(new int[] {1, 2, 1, 0}),
+	SKIP(new int[] {1, 2, 0, 0}),
+	SLIMULACRA(new int[] {3, 0, 3, 0}),
+	SUPERSKELETON(new int[] {0, 1, 1, 1}),
+	TADVOLT(new int[] {0, 0, 2, 0}),
+	TOADSDRAKE(new int[] {0, 2, 2, 2}),
+	TORPEETO(new int[] {0, 2, 0, 0}),
+	TRAITORUS(new int[] {1, 0, 2, 0}),
+	TROUPPLEACOLYTE(new int[] {0, 2, 1, 1}),
+	TROUPPLEMISSIONARY(new int[] {1, 0, 1, 2}),
+	WHIPPICLES(new int[] {2, 0, 0, 2}),
+	WIZZEM(new int[] {1, 0, 1, 1}),
+	ZAMBY(new int[] {0, 1, 1, 0});
 	
-
 	private int[] arrows;
+	private int player;
 	
 	private EnumCards(int[] arrows) {
 		this.arrows = arrows;
+		this.player = -1;
 	}
 
 	public int[] getArrows() {
 		return arrows;
 	}
+	
+	public int getPlayer() {
+		return player;
+	}
+
+	public void setPlayer(int player) {
+		this.player = player;
+	}
 
 	public BufferedImage getImage() {
 		BufferedImage image = null;
 		try {
-			image = ImageIO.read(new File(String.format("resources/images/Cards/BlueCards/BaseCards/Card%s.png", this.toString())));
+			if(this.player == 1) {
+				image = ImageIO.read(new File(String.format("resources/images/Cards/BlueCards/BaseCards/Card%s.png", this.toString())));
+			}else {
+				image = ImageIO.read(new File(String.format("resources/images/Cards/RedCards/BaseCards/RedCard%s.png", this.toString())));
+			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return image;
 	}
+
 }
 
