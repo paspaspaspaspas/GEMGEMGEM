@@ -28,27 +28,15 @@ public class CardV extends JComponent implements MouseListener, MouseMotionListe
 	// ATTRIBUTI
 	private Color mainColor;
 	private Color sidesColor;
-	private BufferedImage image;
+	protected BufferedImage image;
 	private boolean isVisible = true;
-	protected EnumCards card = null;
 	
 
 	// COSTRUTTORI
-	public CardV(Color mainColor, Color sidesColor, boolean isClickable, EnumCards card) {
-		this.setMainColor(mainColor);
-		this.setSidesColor(sidesColor);
-		this.card = card;
-		this.image = this.card != null ? this.card.getImage() : null;
-		if (isClickable) {
-			this.addMouseListener(this);
-			this.addMouseMotionListener(this);
-		}
-	}
 	
 	public CardV(Color mainColor, Color sidesColor, boolean isClickable, BufferedImage image) {
 		this.setMainColor(mainColor);
 		this.setSidesColor(sidesColor);
-		this.card = null;
 		this.image = image;
 		if (isClickable) {
 			this.addMouseListener(this);
@@ -64,14 +52,6 @@ public class CardV extends JComponent implements MouseListener, MouseMotionListe
 	 */
 	public CardV(boolean isVisible) {
 		this.isVisible = isVisible;
-	}
-	
-	public EnumCards getCard() {
-		return card;
-	}
-
-	public void setCard(EnumCards card) {
-		this.card = card;
 	}
 
 	// METODI
@@ -126,29 +106,10 @@ public class CardV extends JComponent implements MouseListener, MouseMotionListe
 	public void setImage(BufferedImage image) {
 		this.image = image;
 	}
-	
-	public void loadCard(EnumCards cardToLoad) {
-		this.setCard(cardToLoad);
-		this.setImage(cardToLoad.getImage());
-	}
 
 	@Override
+
 	public void mouseClicked(MouseEvent e) {
-		//Move more than one card with a single action (it's executed by the Board)
-		if (this.image != null && MatchV.selectedCard.getImage() != null) {
-			return;
-		//Deploy the selected card
-		} else if (MatchV.selectedCard.getImage() != null) {
-			this.image = MatchV.selectedCard.getImage();
-			this.card = MatchV.selectedCard.getCard();
-			MatchV.selectedCard.deselected();
-			System.out.println("YOUR TURN IS OVER MATE cit. CardV");
-			MatchV.loadModel();
-		}
-		// Questo repaint è importante altrimenti alcune zone della carta non vengono
-		// aggiornate
-		// qualora le carte in PlayerV e BoardV siano di dimensioni diverse
-		this.repaint();
 	}
 
 	@Override
@@ -182,14 +143,7 @@ public class CardV extends JComponent implements MouseListener, MouseMotionListe
 	}
 
 	@Override
-	/**
-	 * Permette di tenere traccia di dove è posizionato il muose RISPETTO ALLO
-	 * SCHERMO quando si trova su un oggetto della classe CardV. In questo modo
-	 * posso rappresentare e muovere la carta selezionata o il puntatore qualore
-	 * nessuna carta sia stata precedentemente scelta.
-	 */
 	public void mouseMoved(MouseEvent e) {
-		// Questo valore e i suoi derivati hanno solo fini estetici
 		int l = Math.min(MatchV.frame.getContentPane().getHeight(), MatchV.frame.getContentPane().getWidth());
 		if (MatchV.selectedCard.isSelected()) {
 			MatchV.selectedCard.setBounds((int) (MatchV.frame.getContentPane().getMousePosition().getX() - l / 30),

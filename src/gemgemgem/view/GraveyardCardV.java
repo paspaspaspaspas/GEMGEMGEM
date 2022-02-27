@@ -1,6 +1,7 @@
 package gemgemgem.view;
 
 import java.awt.Color;
+import java.awt.image.BufferedImage;
 
 import gemgemgem.EnumCards;
 
@@ -13,7 +14,7 @@ import gemgemgem.EnumCards;
 public class GraveyardCardV extends CardV{
 	
 	//COSTRUTTORE
-	public GraveyardCardV(EnumCards card) {
-		super(Color.GRAY, Color.DARK_GRAY, false, card);
+	public GraveyardCardV(BufferedImage image) {
+		super(Color.GRAY, Color.DARK_GRAY, false, image);
 	}
 }

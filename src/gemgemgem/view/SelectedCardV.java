@@ -23,8 +23,8 @@ public class SelectedCardV extends CardV {
 	private boolean isSelected;
 
 	//COSTRUTTORE
-	public SelectedCardV() {
-		super(Color.PINK, Color.MAGENTA, false, (EnumCards) null);
+	public SelectedCardV(BufferedImage image) {
+		super(Color.PINK, Color.MAGENTA, false, image);
 		this.isSelected = false;
 	}
 
@@ -53,13 +53,20 @@ public class SelectedCardV extends CardV {
 	public void deselected() {
 		this.setSelected(false);
 		this.setImage(null);
-		this.setCard(null);
 	}
 	
-	public void selected(BufferedImage image, EnumCards card) {
+	public void selected(BufferedImage image) {
 		this.setSelected(true);
 		this.setImage(image);
-		this.setCard(card);
+	}
+
+	public void reload(BufferedImage selectedCard) {
+		if(selectedCard != null) {		
+			this.selected(selectedCard);
+		}else {
+			this.deselected();
+		}
+		this.repaint();
 	}
 
 }

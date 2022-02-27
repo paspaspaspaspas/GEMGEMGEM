@@ -9,6 +9,7 @@ import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
 import java.util.Random;
 
 import gemgemgem.EnumCards;
@@ -26,8 +27,8 @@ public class BoardCardV extends CardV implements MouseListener, MouseMotionListe
 	Point mousePosition;
 
 	// COSTRUTTORE
-	public BoardCardV(EnumCards card) {
-		super(Color.CYAN, Color.BLUE, true, card);
+	public BoardCardV(BufferedImage image) {
+		super(Color.CYAN, Color.BLUE, true, image);
 	}
 
 	protected void paintComponent(Graphics g) {

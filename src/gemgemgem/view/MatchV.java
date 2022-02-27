@@ -12,7 +12,9 @@ import javax.swing.JPanel;
 
 import gemgemgem.EnumCards;
 import gemgemgem.EnumImagesUtility;
+import gemgemgem.controller.MatchC;
 import gemgemgem.model.MatchM;
+import gemgemgem.model.ModelInfo;
 
 import java.awt.FlowLayout;
 import java.awt.Graphics;
@@ -46,33 +48,15 @@ public class MatchV implements MouseMotionListener {
 	private static PlayerV player2;
 	static SelectedCardV selectedCard;
 	
-	protected static MatchM matchModel;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MatchV window = new MatchV(null);
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	protected static ModelInfo info;
+	protected static MatchC controller;
 
 	/**
 	 * Create the application.
 	 */
-	public MatchV(MatchM matchModel) {
-		if(matchModel == null) {
-			this.matchModel = generateNewModel();
-		}else {
-			this.matchModel = matchModel;
-		}
+	public MatchV(ModelInfo info, MatchC controller) {
+		this.info = info;
+		this.controller = controller;
 		initialize();
 	}
 
@@ -85,7 +69,7 @@ public class MatchV implements MouseMotionListener {
 		frame.setBounds(50, 50, 1024, 768);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		selectedCard = new SelectedCardV();
+		selectedCard = new SelectedCardV(info.getSelectedCard());
 		selectedCard.setBounds(1, 1, 1, 1);
 		frame.getContentPane().add(selectedCard);
 
@@ -113,34 +97,6 @@ public class MatchV implements MouseMotionListener {
 		panel.add(player2);
 
 		frame.getContentPane().addMouseMotionListener(this);
-		// frame.getContentPane().addMouseListener(this);
-	}
-	
-	private MatchM generateNewModel() {
-		MatchM model = new MatchM();
-		model.setP1Cards(generatePlayerCards(1));
-		model.setBoardCards(null);
-		model.setP2Cards(generatePlayerCards(2));
-		return model;
-	}
-	
-	private HashMap<Integer, EnumCards> generatePlayerCards(int player) {
-		HashMap<Integer, EnumCards> playerCards = new HashMap<Integer, EnumCards>();
-		for(int i = 1; i <= 3; i++) {
-			playerCards.put(i, estrai(player));
-		}
-		return playerCards;
-	}
-
-	private EnumCards estrai(int player) {
-		Random rand = new Random();
-		EnumCards card;
-		do {
-			int i = rand.nextInt(EnumCards.values().length);
-			card = EnumCards.values()[i];	
-		}while(card.getPlayer() != -1);
-		card.setPlayer(player);
-		return card;
 	}
 
 	@Override
@@ -148,12 +104,6 @@ public class MatchV implements MouseMotionListener {
 
 	}
 
-	@Override
-	/**
-	 * Mi permette di tenere traccia della posizione del mouse rispetto alla
-	 * finestra. In questo modo muovo la carta selezionata o il cursore qualora
-	 * nessuna carta sia stata scelta in precedenza.
-	 */
 	public void mouseMoved(MouseEvent e) {
 		int l = Math.min(frame.getWidth(), frame.getHeight());
 		if (selectedCard.isSelected()) {
@@ -167,11 +117,14 @@ public class MatchV implements MouseMotionListener {
 		selectedCard.repaint();
 	}
 
-	public static void loadModel() {
-		MatchV.matchModel.setP1Cards(player1.getCards());
-		MatchV.matchModel.setBoardCards(board.getCards());
-		MatchV.matchModel.setP2Cards(player2.getCards());
-		
+	public void repaint() {
+		frame.repaint();
+	}
+
+	public void reload(ModelInfo info) {
+		player1.reload(info.getImagesP1());
+		board.reload(info.getImagesBoard());
+		selectedCard.reload(info.getSelectedCard());
 	}
 
 }
