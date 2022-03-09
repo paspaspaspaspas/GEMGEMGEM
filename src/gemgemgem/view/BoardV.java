@@ -11,6 +11,8 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JComponent;
 
+import gemgemgem.EnumTriangle;
+
 public class BoardV extends JComponent implements MouseListener {
 
 	private int cardsPerSides = 5;
@@ -76,9 +78,9 @@ public class BoardV extends JComponent implements MouseListener {
 				if (cardClicked == cards[i][j]) {
 					if (MatchV.selectedCard.getImage() != null && cardClicked.getImage() != null) {
 						EnumTriangle direction = cardClicked.whichTriangle(mousePosition);
-						MatchV.controller.executeMove(i, j, direction);
+						MatchV.controller.executeMove(i, j, direction, null);
 					} else if (MatchV.selectedCard.getImage() != null) {
-						MatchV.controller.placeCard(i, j);
+						MatchV.controller.placeCard(i, j, null);
 					}
 				}
 			}

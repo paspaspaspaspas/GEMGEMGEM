@@ -3,14 +3,15 @@ PROBLEMI
 -> Quando clicchi su una carta e rimani perfettamente fermo la carta selezionata/il puntatore hanno dimensioni a strane.
 -> Se la finestra assume dimensioni particolarmente sproporzionate la selected card diventa più grande delle carte stesse.
 -> Quando ti occupi del movimento delle carte c'è un po' di codice ripetuto per gestire le 4 direzioni.
--> La determinazione del vincitore ora c'è, ma avviene nella boardV e non sono sicuro che debba stare lì.
+-> Ho paura che visto che le hashmap non contengono tutte le chiavi quando la chiave non è presente la view si rompa
+
 
 IDEE
 
 TODO
 
-							STAI SPERIMENTANDO! NON COMMITTARE!!!
 -> Quando ricevo un model si aggiornano i valori delle EnumCards oppure come fanno a coesistere?
 -> Implementare la divisione a turni, ma credo sia successiva alla parte di Network
--> Ho paura che visto che le hashmap non contengono tutte le chiavi quando la chiave non è presente la view si rompa
-
+-> QUESTE SONO LE PROSSIME COSE DA FARE
+-> POTREI FARE RITORNARE LA STRINGA DI COSA è SUCCESSO DAL MODEL STESSO
+-> il client deve partire dal model del "server"

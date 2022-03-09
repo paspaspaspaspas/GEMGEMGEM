@@ -1,4 +1,4 @@
-package gemgemgem.view;
+package gemgemgem;
 
 public enum EnumTriangle {
 	UP(2),
@@ -18,7 +18,5 @@ public enum EnumTriangle {
 
 	public void setIndex(int index) {
 		this.index = index;
-	}
-	
-	
+	}	
 }

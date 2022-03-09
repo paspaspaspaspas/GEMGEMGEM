@@ -13,6 +13,7 @@ import java.awt.image.BufferedImage;
 import java.util.Random;
 
 import gemgemgem.EnumCards;
+import gemgemgem.EnumTriangle;
 
 /**
  * Rappresenta la view una carta generica posizionata sul terreno di gioco.

@@ -66,8 +66,9 @@ public class MatchV implements MouseMotionListener {
 	private void initialize() {
 		frame = new JFrame();
 
-		frame.setBounds(50, 50, 1024, 768);
+		frame.setBounds(250, 30, 1024, 768);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
 
 		selectedCard = new SelectedCardV(info.getSelectedCard());
 		selectedCard.setBounds(1, 1, 1, 1);
@@ -123,6 +124,7 @@ public class MatchV implements MouseMotionListener {
 
 	public void reload(ModelInfo info) {
 		player1.reload(info.getImagesP1());
+		player2.reload(info.getImagesP2());
 		board.reload(info.getImagesBoard());
 		selectedCard.reload(info.getSelectedCard());
 	}

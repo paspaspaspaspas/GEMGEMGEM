@@ -92,7 +92,7 @@ public class PlayerV extends JComponent implements MouseListener {
 		for (int i = 1; i < 4; i++) {
 			if (cards[i] == cardClicked) {
 				if (cards[i].getImage() == null && MatchV.selectedCard != null) {
-					MatchV.controller.placeCard(i, -1);
+					MatchV.controller.placeCard(i, -1, null);
 					MatchV.selectedCard.deselected();
 				} else {
 					MatchV.controller.pickUpCard(i);

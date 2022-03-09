@@ -11,7 +11,8 @@ public enum EnumImagesUtility {
 	BLUE_BACK("BlueCardBack"),
 	ICON1("King_Knight_Ultimate_Supreme_Portrait"),
 	ICON2("King_Knight_Mirror_Portrait"),
-	TABLE("table");
+	TABLE("table"),
+	BACKGROUND("background");
 	
 	private String name;
 	

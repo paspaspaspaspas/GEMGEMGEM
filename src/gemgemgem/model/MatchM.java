@@ -9,9 +9,14 @@ import java.util.Map;
 import java.util.Random;
 
 import gemgemgem.EnumCards;
-import gemgemgem.view.EnumTriangle;
+import gemgemgem.EnumTriangle;
 
 public class MatchM {
+	
+	public static final String PLACE = "PLACE %d %d %d";
+	public static final String PUSH = "PUSH %d %d %s %s";
+	public static final String DRAW = "DRAW %d %s %d";
+	
 	private HashMap<Integer, EnumCards> p1Cards;
 	private HashMap<List<Integer>, EnumCards> boardCards = new HashMap<>();
 	private HashMap<Integer, EnumCards> p2Cards;
@@ -23,7 +28,7 @@ public class MatchM {
 		p2Cards = generatePlayerCards(2);
 		gems = generateGems();
 	}
-	
+
 	public <T> List<T> getKey(T... items) {
 		List<T> mutableList = new ArrayList<>();
 		for (T item : items) {
@@ -31,7 +36,7 @@ public class MatchM {
 		}
 		return Collections.unmodifiableList(mutableList);
 	}
-		
+
 	private ArrayList<Integer[]> generateGems() {
 		Random random = new Random();
 		ArrayList<Integer[]> gems = new ArrayList<>();
@@ -41,16 +46,17 @@ public class MatchM {
 			int y = random.nextInt(3) + 1;
 			/*
 			 * I can't use the contains() method since Integer[] is not an immutable class.
-			 * Hence the hashcode of two Integer arrays, even if they contains the same values, are
-			 * different.
-			 * This leads the contains() method to consider them as not the same value.
+			 * Hence the hashcode of two Integer arrays, even if they contains the same
+			 * values, are different. This leads the contains() method to consider them as
+			 * not the same value.
 			 */
-			for(Integer[] gemCoordinates : gems) {
+			for (Integer[] gemCoordinates : gems) {
 				isNew = gemCoordinates[0] != x || gemCoordinates[1] != y;
-				if(!isNew) break;
+				if (!isNew)
+					break;
 			}
-			if(isNew) {
-				gems.add(new Integer[] {x, y});
+			if (isNew) {
+				gems.add(new Integer[] { x, y });
 			}
 		} while (gems.size() < 3);
 		return gems;
@@ -61,18 +67,18 @@ public class MatchM {
 		BufferedImage[][] imagesBoard = new BufferedImage[5][5];
 		BufferedImage[] imagesP2 = new BufferedImage[3];
 		BufferedImage selectedImage;
-		for(Map.Entry<Integer, EnumCards> e : p1Cards.entrySet()) {
+		for (Map.Entry<Integer, EnumCards> e : p1Cards.entrySet()) {
 			imagesP1[e.getKey()] = e.getValue() != null ? e.getValue().getImage() : null;
 		}
-		for(Map.Entry<List<Integer>, EnumCards> e : boardCards.entrySet()) {
+		for (Map.Entry<List<Integer>, EnumCards> e : boardCards.entrySet()) {
 			imagesBoard[e.getKey().get(0)][e.getKey().get(1)] = e.getValue().getImage();
 		}
-		for(Map.Entry<Integer, EnumCards> e : p2Cards.entrySet()) {
+		for (Map.Entry<Integer, EnumCards> e : p2Cards.entrySet()) {
 			imagesP2[e.getKey()] = e.getValue().getImage();
 		}
 		selectedImage = selectedCard != null ? selectedCard.getImage() : null;
 		return new ModelInfo(imagesP1, imagesBoard, imagesP2, gems, selectedImage);
-		
+
 	}
 
 	private HashMap<Integer, EnumCards> generatePlayerCards(int player) {
@@ -94,96 +100,119 @@ public class MatchM {
 		return card;
 	}
 
-	public boolean moveIsAllowed(int i, int j, EnumTriangle direction) {
+	public boolean pushIsAllowed(int i, int j, EnumTriangle direction) {
 		boolean isAllowed = true;
 		switch (direction) {
 		case UP:
 			if (j == 4)
 				return false;
-			if (j < 5 && boardCards.get(getKey(i, j+1)) != null) {
-				isAllowed = moveIsAllowed(i, j + 1, EnumTriangle.UP);
+			if (j < 5 && boardCards.get(getKey(i, j + 1)) != null) {
+				isAllowed = pushIsAllowed(i, j + 1, EnumTriangle.UP);
 			}
-			return (selectedCard.getArrows()[EnumTriangle.UP.getIndex()] > boardCards.get(getKey(i,j))
+			return (selectedCard.getArrows()[EnumTriangle.UP.getIndex()] > boardCards.get(getKey(i, j))
 					.getArrows()[EnumTriangle.DOWN.getIndex()] && isAllowed) ? true : false;
 
 		case RIGHT:
 			if (i == 0)
 				return false;
-			if (i > 0 && boardCards.get(getKey(i-1,j)) != null) {
-				isAllowed = moveIsAllowed(i - 1, j, EnumTriangle.RIGHT);
+			if (i > 0 && boardCards.get(getKey(i - 1, j)) != null) {
+				isAllowed = pushIsAllowed(i - 1, j, EnumTriangle.RIGHT);
 			}
-			return (selectedCard.getArrows()[EnumTriangle.RIGHT.getIndex()] > boardCards.get(getKey(i,j))
+			return (selectedCard.getArrows()[EnumTriangle.RIGHT.getIndex()] > boardCards.get(getKey(i, j))
 					.getArrows()[EnumTriangle.LEFT.getIndex()] && isAllowed) ? true : false;
 
 		case DOWN:
 			if (j == 0)
 				return false;
-			if (j > 0 && boardCards.get(getKey(i,j-1)) != null) {
-				isAllowed = moveIsAllowed(i, j - 1, EnumTriangle.DOWN);
+			if (j > 0 && boardCards.get(getKey(i, j - 1)) != null) {
+				isAllowed = pushIsAllowed(i, j - 1, EnumTriangle.DOWN);
 			}
-			return (selectedCard.getArrows()[EnumTriangle.DOWN.getIndex()] > boardCards.get(getKey(i,j))
+			return (selectedCard.getArrows()[EnumTriangle.DOWN.getIndex()] > boardCards.get(getKey(i, j))
 					.getArrows()[EnumTriangle.UP.getIndex()] && isAllowed) ? true : false;
 
 		default:
 			if (i == 4)
 				return false;
-			if (i < 5 && boardCards.get(getKey(i+1,j)) != null) {
-				isAllowed = moveIsAllowed(i + 1, j, EnumTriangle.LEFT);
+			if (i < 5 && boardCards.get(getKey(i + 1, j)) != null) {
+				isAllowed = pushIsAllowed(i + 1, j, EnumTriangle.LEFT);
 			}
-			return (selectedCard.getArrows()[EnumTriangle.LEFT.getIndex()] > boardCards.get(getKey(i,j))
+			return (selectedCard.getArrows()[EnumTriangle.LEFT.getIndex()] > boardCards.get(getKey(i, j))
 					.getArrows()[EnumTriangle.RIGHT.getIndex()] && isAllowed) ? true : false;
 		}
 
 	}
-	
+
 	public void moveCards(int i, int j, EnumTriangle direction, EnumCards newCard) {
+		if(newCard == null) {
+			newCard = this.selectedCard;
+		}
 		switch (direction) {
 		case UP:
-			if (j < 5 && boardCards.get(getKey(i,j+1)) != null) {
-				moveCards(i, j + 1, EnumTriangle.UP, boardCards.get(getKey(i,j)));
+			if (j < 5 && boardCards.get(getKey(i, j + 1)) != null) {
+				moveCards(i, j + 1, EnumTriangle.UP, boardCards.get(getKey(i, j)));
 			}
-			boardCards.put(getKey(i,j+1), boardCards.get(getKey(i,j)));
+			boardCards.put(getKey(i, j + 1), boardCards.get(getKey(i, j)));
 			break;
 		case RIGHT:
-			if (i > 0 && boardCards.get(getKey(i-1,j)) != null) {
-				moveCards(i-1, j, EnumTriangle.RIGHT, boardCards.get(getKey(i,j)));
+			if (i > 0 && boardCards.get(getKey(i - 1, j)) != null) {
+				moveCards(i - 1, j, EnumTriangle.RIGHT, boardCards.get(getKey(i, j)));
 			}
-			boardCards.put(getKey(i-1,j), boardCards.get(getKey(i,j)));
+			boardCards.put(getKey(i - 1, j), boardCards.get(getKey(i, j)));
 			break;
 		case DOWN:
-			if (j > 0 && boardCards.get(getKey(i,j-1)) != null) {
-				moveCards(i, j - 1, EnumTriangle.DOWN, boardCards.get(getKey(i,j)));
+			if (j > 0 && boardCards.get(getKey(i, j - 1)) != null) {
+				moveCards(i, j - 1, EnumTriangle.DOWN, boardCards.get(getKey(i, j)));
 			}
-			boardCards.put(getKey(i,j-1), boardCards.get(getKey(i,j)));
+			boardCards.put(getKey(i, j - 1), boardCards.get(getKey(i, j)));
 			break;
 		default:
-			if (i < 5 && boardCards.get(getKey(i+1,j)) != null) {
-				moveCards(i + 1, j, EnumTriangle.LEFT, boardCards.get(getKey(i,j)));
+			if (i < 5 && boardCards.get(getKey(i + 1, j)) != null) {
+				moveCards(i + 1, j, EnumTriangle.LEFT, boardCards.get(getKey(i, j)));
 			}
 
-			boardCards.put(getKey(i+1,j), boardCards.get(getKey(i,j)));
+			boardCards.put(getKey(i + 1, j), boardCards.get(getKey(i, j)));
 		}
-		boardCards.put(getKey(i,j), newCard);
+		boardCards.put(getKey(i, j), newCard);
 		replaceCard();
 		selectedCard = null;
 	}
-	
-	public void placeCard(int i, int j) {
-		if(j != -1) {
-			boardCards.put(getKey(i,j), selectedCard);
-			replaceCard();
+
+	public boolean placeIsAllowed(int i, int j) {
+		if(j != -1) {		
+			boolean isThereAGem = false;
+			for(Integer[] gem : gems) {
+				if(gem[0] == i && gem[1] == j) {
+					isThereAGem = true;
+					break;
+				}
+			}
+			return !isThereAGem;
 		}else {
-			p1Cards.put(i-1, selectedCard);
+			return p1Cards.get(i - 1) == null ? true : false;
+		}
+	}
+	
+	public void placeCard(int i, int j, EnumCards card) {
+		EnumCards cardToPlace = card == null ? selectedCard : card;
+		if (j != -1) {
+			boardCards.put(getKey(i, j), cardToPlace);
+			if(card == null) replaceCard();
+		} else {
+			p1Cards.put(i - 1, cardToPlace);
 		}
 		selectedCard = null;
 	}
 
 	private void replaceCard() {
-		for(Map.Entry<Integer, EnumCards> benchSpot : p1Cards.entrySet()) {
-			if(benchSpot.getValue() == null) {
+		for (Map.Entry<Integer, EnumCards> benchSpot : p1Cards.entrySet()) {
+			if (benchSpot.getValue() == null) {
 				p1Cards.put(benchSpot.getKey(), drawCard(1));
 			}
 		}
+	}
+
+	public boolean pickUpIsAllowed() {
+		return selectedCard == null ? true : false;
 	}
 	
 	public void pickUpCard(int i) {
@@ -191,21 +220,47 @@ public class MatchM {
 		this.selectedCard = p1Cards.get(adjustedIndex);
 		p1Cards.put(adjustedIndex, null);
 	}
+	
+	public void placeCard(int x, EnumCards card, int player) {
+		if(player == 1) {
+			p1Cards.put(x, card);
+		}else {		
+			p2Cards.put(x, card);
+		}
+	}
 
-	public boolean isGameOver() {
+	public int isGameOver() {
 		/*
 		 * 
 		 * DEVI AGGIUNGERE UN CONTROLLO PER DISPONIBILITà MOSSE LEGALI.
+		 * (di chi devi controllare le mosse???)
 		 * 
 		 */
 		boolean isGameOver = true;
-		for(Integer[] gem : gems) {
-			if(boardCards.get(gem) == null) {
+		for (Integer[] gem : gems) {
+			if (boardCards.get(getKey(gem[0], gem[1])) == null) {
 				isGameOver = false;
 				break;
 			}
 		}
-		return isGameOver;
+		if (isGameOver) {
+			return declareWinner();
+		}
+		return -1;
+	}
+
+	private int declareWinner() {
+		/*
+		 * SE EVENTUALMENTE CONTROLLERAI LE MOSSE DISPONIBILI CI SARà ANCHE LA POSSIBILITà DI UN PAREGGIO
+		 */
+		int p1Points = 0;
+		for (Integer[] gem : gems) {
+			if (boardCards.get(getKey(gem[0], gem[1])).getPlayer() == 1) {
+				p1Points++;
+			}
+		}
+		return p1Points >= 2 ? 1 : 2;
+
 	}
 
 	public HashMap<Integer, EnumCards> getP1Cards() {
@@ -248,7 +303,16 @@ public class MatchM {
 		this.selectedCard = selectedCard;
 	}
 
+	public ArrayList<String> getData() {
+		ArrayList<String> data = new ArrayList<>();
+		for(int i = 0; i < 3; i++) {
+			data.add(String.format(DRAW, i, p1Cards.get(i).toString(), 2));
+			data.add(String.format(DRAW, i, p2Cards.get(i).toString(), 1));
+		}
+		return data;
+	}
 
-	
+
+
 
 }
