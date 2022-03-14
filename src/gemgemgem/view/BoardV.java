@@ -37,9 +37,7 @@ public class BoardV extends JComponent implements MouseListener {
 			}
 		}
 
-		for (Integer[] gem : MatchV.info.getGems()) {
-			((BoardCardV) cards[gem[0]][gem[1]]).setHasGem(true);
-		}
+		setGems();
 
 		for (CardV[] cardRow : cards) {
 			for (CardV card : cardRow) {
@@ -47,6 +45,17 @@ public class BoardV extends JComponent implements MouseListener {
 					card.addMouseListener(this);
 				}
 			}
+		}
+	}
+
+	protected void setGems() {
+		for(int i = 1; i < 4; i++) {
+			for(int j = 1; j < 4; j++) {
+				((BoardCardV) cards[i][j]).setHasGem(false);
+			}
+		}
+		for (Integer[] gem : MatchV.info.getGems()) {
+			((BoardCardV) cards[gem[0]][gem[1]]).setHasGem(true);
 		}
 	}
 
@@ -117,6 +126,7 @@ public class BoardV extends JComponent implements MouseListener {
 				cards[i][j].setImage(images[i][j]);
 			}
 		}
+		setGems();
 		this.repaint();
 	}
 

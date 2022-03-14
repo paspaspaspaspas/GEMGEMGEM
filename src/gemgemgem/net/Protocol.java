@@ -18,10 +18,15 @@ import gemgemgem.controller.MatchC;
 
 public class Protocol {
 
-	private MatchC match;
-
+	protected MatchC match;
+	protected HashMap<String, Consumer<Event>> commandMap;
+	
 	public Protocol(MatchC match) {
 		this.match = match;
+		commandMap = new HashMap<>();
+		commandMap.put("PLACE", e -> e.getSender().placeCard(e.getParameters()));
+		commandMap.put("PUSH", e -> e.getSender().pushCard(e.getParameters()));
+		commandMap.put("DRAW", e -> e.getSender().drawCard(e.getParameters()));
 	}
 
 	/*

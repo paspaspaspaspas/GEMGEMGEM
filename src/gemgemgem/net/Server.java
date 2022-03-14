@@ -10,41 +10,46 @@ import java.net.Socket;
 import gemgemgem.controller.MatchC;
 
 public class Server implements Runnable {
-	
-	MatchC match = new MatchC();
+
+	MatchC match;
 	boolean isRunning = true;
 	PrintWriter out;
 	BufferedReader in;
-	
+
+	public Server() {
+		this.match = new MatchC();
+	}
+
 	@Override
 	public void run() {
-		
 		System.out.println("[System] : THE SERVER IS STARTING");
-		try (	
-				ServerSocket s = new ServerSocket(1234);
-				Socket clientSocket = s.accept();
-				) {
+		try (ServerSocket s = new ServerSocket(1234); Socket clientSocket = s.accept();) {
+
 			this.out = new PrintWriter(clientSocket.getOutputStream(), true);
 			this.in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-			String inputLine = "SYNCH";
+
+			String inputLine;
 			ServerProtocol p = new ServerProtocol(match, this);
-			p.processRequest(inputLine);
+
 			while (isRunning && (inputLine = in.readLine()) != null) {
-			        p.processRequest(inputLine);
-			    }
+				p.processRequest(inputLine);
+			}
+
 		} catch (IOException e) {
 			System.err.println("[System] : COMMUNICATION ERROR");
 		}
 	}
+
 	public boolean isRunning() {
 		return isRunning;
 	}
+
 	public void setRunning(boolean isRunning) {
 		this.isRunning = isRunning;
 	}
+
 	public void sendMessage(String message) {
 		out.println(message);
-		
 	}
-	
+
 }

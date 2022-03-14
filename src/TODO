@@ -3,15 +3,15 @@ PROBLEMI
 -> Quando clicchi su una carta e rimani perfettamente fermo la carta selezionata/il puntatore hanno dimensioni a strane.
 -> Se la finestra assume dimensioni particolarmente sproporzionate la selected card diventa più grande delle carte stesse.
 -> Quando ti occupi del movimento delle carte c'è un po' di codice ripetuto per gestire le 4 direzioni.
--> Ho paura che visto che le hashmap non contengono tutte le chiavi quando la chiave non è presente la view si rompa
 
 
 IDEE
 
+-> LA PRIMA MOSSA PUò ESSERE FATTA DA ENTRAMBI I GIOCATORI: BUG O FEATURE?
+
 TODO
 
--> Quando ricevo un model si aggiornano i valori delle EnumCards oppure come fanno a coesistere?
--> Implementare la divisione a turni, ma credo sia successiva alla parte di Network
--> QUESTE SONO LE PROSSIME COSE DA FARE
--> POTREI FARE RITORNARE LA STRINGA DI COSA è SUCCESSO DAL MODEL STESSO
--> il client deve partire dal model del "server"
+-> LA POSSIBILITà DI PAREGGIO NECESSITà DI ALTRO TESTING PERCHè MI è PARSO DESSE SCONFITTA
+	QUANDO ERA PAREGGIO.
+	INOLTRE SE IO NON POSSO MUOVERE NON HO LA POSSIBILITà DI COMUNICARE ALL'ALTRO CHE LA PARTITA è FINITA.
+	DOVREI FARE LA POSSIBILITà DI UN ALTRO COMANDO DEL PROTOCOLLO

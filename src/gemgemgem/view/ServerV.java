@@ -1,24 +1,30 @@
 package gemgemgem.view;
 
 import java.awt.EventQueue;
+import java.awt.Graphics;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import gemgemgem.EntryPoint;
+import gemgemgem.EnumImagesUtility;
 import gemgemgem.controller.MatchC;
 import gemgemgem.net.Client;
 import gemgemgem.net.Server;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.Socket;
 import java.awt.event.ActionEvent;
+import java.awt.Font;
 
 public class ServerV {
 
 	static JFrame frame;
+	static JPanel panel;
 
 	/**
 	 * Launch the application.
@@ -50,29 +56,42 @@ public class ServerV {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		panel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(EnumImagesUtility.TABLE.getImage(), 0, 0, null);
+            }
+        };
+		panel.setBounds(0, 0, frame.getWidth(), frame.getHeight());
+		panel.setLayout(new BorderLayout(0, 0));
+		frame.getContentPane().add(panel);
 
 		JButton btnClient = new JButton("JOIN a lobby");
+		btnClient.setFont(new Font("Curlz MT", Font.PLAIN, 20));
 		btnClient.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frame.setVisible(true);
+				frame.setVisible(false);
 				Client c = new Client();
-				Thread cThread = new Thread();
-				cThread.run();
+				Thread cThread = new Thread(c);
+				cThread.start();
 			}
 		});
-		frame.getContentPane().add(btnClient, BorderLayout.WEST);
+		panel.add(btnClient, BorderLayout.WEST);
 
 		JButton btnServer = new JButton("CREATE a lobby");
+		btnServer.setFont(new Font("Curlz MT", Font.PLAIN, 20));
 		btnServer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.setVisible(false);
 				Server s = new Server();
-				Thread sThread = new Thread();
-				sThread.run();
+				Thread sThread = new Thread(s);
+				sThread.start();
 			}
 
 		});
-		frame.getContentPane().add(btnServer, BorderLayout.EAST);
+		panel.add(btnServer, BorderLayout.EAST);
 	}
 
 	

@@ -7,31 +7,28 @@ import java.util.function.Consumer;
 import gemgemgem.controller.MatchC;
 
 public class ClientProtocol extends Protocol{
-
-	private static HashMap<String, Consumer<Event>> commandMap;
-	static {
-		commandMap = new HashMap<>();
-		commandMap.put("PLACE", e -> e.getSender().placeCard(e.getParameters()));
-		commandMap.put("PUSH", e -> e.getSender().pushCard(e.getParameters()));
-		commandMap.put("DRAW", e -> e.getSender().drawCard(e.getParameters()));
-		commandMap.put("INIZIALIZE", e -> ((ClientProtocol) e.getSender()).inizialize(e.getParameters()));
-		commandMap.put("CLOSE", e -> ((ClientProtocol) e.getSender()).close());
-	}
 	
 	Client client;
 	
 	public ClientProtocol(MatchC match, Client client) {
 		super(match);
 		this.client = client;
+		this.commandMap.put("GEM", e -> ((ClientProtocol) e.getSender()).setGem(e.getParameters()));
+		this.commandMap.put("CLOSE", e -> ((ClientProtocol) e.getSender()).close());
+		match.setProtocol(this);
+		match.setTurn(false);
 	}
 	
-	private void inizialize(ArrayList<String> parameters) {
-		
-		
+	private void setGem(ArrayList<String> parameters) {	
+		match.setGem(Integer.parseInt(parameters.get(0)), Integer.parseInt(parameters.get(1)), Integer.parseInt(parameters.get(2)));
 	}
 
 	public void close() {
 		client.setRunning(false);
+	}
+	
+	public void send(String message) {
+		client.sendMessage(message);
 	}
 	
 }
