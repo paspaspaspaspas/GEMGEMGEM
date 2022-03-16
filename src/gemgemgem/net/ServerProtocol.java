@@ -20,7 +20,7 @@ public class ServerProtocol extends Protocol {
 	}
 
 	private void synch() {
-		ArrayList<String> inizializationInfos = match.getInizializationInfos();
+		ArrayList<String> inizializationInfos = match.getInitializationInfos();
 		for(String s : inizializationInfos) {
 			send(s);
 		}

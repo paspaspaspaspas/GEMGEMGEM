@@ -41,6 +41,14 @@ public class Client implements Runnable {
 			}
 		} catch (IOException e1) {
 			e1.printStackTrace();
+		} finally {
+			out.close();
+			try {
+				in.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 	}

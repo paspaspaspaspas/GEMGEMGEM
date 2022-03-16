@@ -40,7 +40,7 @@ import javax.swing.JButton;
 public class MatchV implements MouseMotionListener {
 
 	// ATTRIBUTI
-	static JFrame frame;
+	public static JFrame frame;
 	private JPanel panel;
 
 	private static BoardV board;

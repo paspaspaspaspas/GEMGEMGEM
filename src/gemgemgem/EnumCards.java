@@ -3,14 +3,22 @@ package gemgemgem;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Random;
 
 import javax.imageio.ImageIO;
 
+/**
+ * This enum class contains all the different cards available to the player.
+ * Each one of them is characterized by the strengh with they can push in each direction and
+ * the index of the player that owns it in this game.
+ * 
+ * @author pas
+ *
+ */
 public enum EnumCards {
+	
 	/*
-	 * Per poter accedere al file ho bisogno che il nome non rispetti il CamelCase, ma 
-	 * sia scritto tutto attaccato.
+	 * In order to get access to the images in the resources folder i had to not use
+	 * the snake case convention.
 	 */
 	ARMORER(new int[] {1, 0, 2, 1}),
 	AXOLONGL(new int[] {0, 3, 0, 3}),
@@ -78,14 +86,24 @@ public enum EnumCards {
 	WIZZEM(new int[] {1, 0, 1, 1}),
 	ZAMBY(new int[] {0, 1, 1, 0});
 	
+	//ATTRIBUTES
 	private int[] arrows;
 	private int player;
 	
+	//CONSTRUCTOR
+	/**
+	 * Constructs each EnumCards value.
+	 * The player value is set by default to -1; this attribute will be refresh as one of
+	 * the players actually draw that card.
+	 * 
+	 * @param arrows : int[]
+	 */
 	private EnumCards(int[] arrows) {
 		this.arrows = arrows;
 		this.player = -1;
 	}
 
+	//GETTERS AND SETTERS
 	public int[] getArrows() {
 		return arrows;
 	}
@@ -98,16 +116,25 @@ public enum EnumCards {
 		this.player = player;
 	}
 
+	//METHODS
+	
+	/**
+	 * This method returns the image linked to a specific EnumCard based on the name.
+	 * It also selects a different version of the same image (blue or red) depending on which
+	 * player owns that card.
+	 * 
+	 * @return image : BufferedImage
+	 */
 	public BufferedImage getImage() {
 		BufferedImage image = null;
 		try {
 			if(this.player == 1) {
-				image = ImageIO.read(new File(String.format("resources/images/Cards/BlueCards/BaseCards/Card%s.png", this.toString())));
+				image = ImageIO.read(new File(String.format(UtilityClass.GET_BLUE_IMAGE, this.toString())));
 			}else {
-				image = ImageIO.read(new File(String.format("resources/images/Cards/RedCards/BaseCards/RedCard%s.png", this.toString())));
+				image = ImageIO.read(new File(String.format(UtilityClass.GET_RED_IMAGE, this.toString())));
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.err.print(UtilityClass.GET_IMAGE_ERROR);
 		}
 		return image;
 	}

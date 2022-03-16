@@ -215,7 +215,7 @@ public class MatchM {
 		for (Map.Entry<Integer, EnumCards> benchSpot : p1Cards.entrySet()) {
 			if (benchSpot.getValue() == null) {
 				p1Cards.put(benchSpot.getKey(), drawCard(1));
-				controller.send(String.format(UtilityClass.DRAW, benchSpot.getKey(), benchSpot.getValue().toString(), 2));
+				controller.send(String.format(UtilityClass.DRAW_COMMAND, benchSpot.getKey(), benchSpot.getValue().toString(), 2));
 			}
 		}
 	}
@@ -340,14 +340,14 @@ public class MatchM {
 		this.selectedCard = selectedCard;
 	}
 
-	public ArrayList<String> getInizializationInfos() {
+	public ArrayList<String> getInitializationInfos() {
 		ArrayList<String> data = new ArrayList<>();
 		for (int i = 0; i < 3; i++) {
-			data.add(String.format(UtilityClass.DRAW, i, p1Cards.get(i).toString(), 2));
-			data.add(String.format(UtilityClass.DRAW, i, p2Cards.get(i).toString(), 1));
+			data.add(String.format(UtilityClass.DRAW_COMMAND, i, p1Cards.get(i).toString(), 2));
+			data.add(String.format(UtilityClass.DRAW_COMMAND, i, p2Cards.get(i).toString(), 1));
 		}
 		for (int i = 0; i < 3; i++) {
-			data.add(String.format(UtilityClass.GEM, i, gems.get(i)[0], gems.get(i)[1]));
+			data.add(String.format(UtilityClass.GEM_COMMAND, i, gems.get(i)[0], gems.get(i)[1]));
 		}
 		return data;
 	}

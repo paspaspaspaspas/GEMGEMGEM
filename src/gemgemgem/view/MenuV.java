@@ -26,7 +26,7 @@ import java.awt.event.ActionEvent;
 
 public class MenuV {
 
-	private JFrame frame;
+	static JFrame frame;
 
 	/**
 	 * Launch the application.
@@ -79,8 +79,8 @@ public class MenuV {
 		JButton playButton = new JButton("PLAY");
 		playButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frame.setVisible(false);
 				ServerV.frame.setVisible(true);
+				frame.setVisible(false);
 			}
 		});
 		playButton.setBackground(Color.GREEN);
