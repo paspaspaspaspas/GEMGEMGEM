@@ -1,6 +1,9 @@
 package gemgemgem.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import gemgemgem.EntryPoint;
 import gemgemgem.EnumCards;
@@ -115,18 +118,86 @@ public class MatchC {
 		 * have selected doesn't mean anything in this resolution.
 		 */
 		EnumCards selectedCard = model.getSelectedCard() != null ? model.getSelectedCard() : null;
-		if (model.pushIsAllowed(x, y, direction, selectedCard) || card != null) {
+		if (pushIsAllowed(x, y, direction, selectedCard) || card != null) {
 			/*
 			 * Only if it has been the player to execute the move I'm going to send this
 			 * information to the protocol.
 			 */
 			if (card == null)
-				send(String.format(UtilityClass.PUSH_COMMAND, x, y, direction.toString(), model.getSelectedCard().toString()));
+				send(String.format(UtilityClass.PUSH_COMMAND, x, y, direction.toString(),
+						model.getSelectedCard().toString()));
 			model.moveCards(x, y, direction, card);
 			reload();
 			isGameOver();
 		} else {
 			System.out.println(UtilityClass.MOVE_NOT_ALLOWED);
+		}
+
+	}
+
+	/**
+	 * Before executing a move and modify the model, thanks to this method, the
+	 * controller checks if the move is actually allowed.
+	 * 
+	 * In order to do so it confronts the strength of the pushing arrow of the card
+	 * that the player is trying to place with the opposing arrows of the card
+	 * already placed. Since with a single move the player is able to move a
+	 * sequence of cards this method is recursive: even if the placement is allowed
+	 * in a certain position if the next cell is not empty the methods calls itself
+	 * with the same card but in the new position.
+	 * 
+	 * @param x         : int - first coordinate of the cell where i want to place
+	 *                  the card
+	 * @param y         : int - second coordinate of the cell where i want to place
+	 *                  the card
+	 * @param direction : EnumTriangle - rapresents the direction in which the card
+	 *                  that wants to be placed is going to push
+	 * @param card      : EnumCards - the card that want to be placed
+	 * @return isAllowed : boolean - the value represents if the move is allowed or
+	 *         it is illegal
+	 */
+	public static boolean pushIsAllowed(int x, int y, EnumTriangle direction, EnumCards card) {
+		if (card == null)
+			return false;
+
+		boolean isAllowed = true;
+		HashMap<List<Integer>, EnumCards> boardCards = model.getBoardCards();
+		switch (direction) {
+		case UP:
+			if (y == 4)
+				return false;
+			if (y < 5 && boardCards.get(model.getKey(x, y + 1)) != null) {
+				isAllowed = pushIsAllowed(x, y + 1, EnumTriangle.UP, card);
+			}
+			return (card.getArrows()[EnumTriangle.UP.getIndex()] > boardCards.get(model.getKey(x, y))
+					.getArrows()[EnumTriangle.DOWN.getIndex()] && isAllowed) ? true : false;
+
+		case RIGHT:
+			if (x == 0)
+				return false;
+			if (x > 0 && boardCards.get(model.getKey(x - 1, y)) != null) {
+				isAllowed = pushIsAllowed(x - 1, y, EnumTriangle.RIGHT, card);
+			}
+			return (card.getArrows()[EnumTriangle.RIGHT.getIndex()] > boardCards.get(model.getKey(x, y))
+					.getArrows()[EnumTriangle.LEFT.getIndex()] && isAllowed) ? true : false;
+
+		case DOWN:
+			if (y == 0)
+				return false;
+			if (y > 0 && boardCards.get(model.getKey(x, y - 1)) != null) {
+				isAllowed = pushIsAllowed(x, y - 1, EnumTriangle.DOWN, card);
+			}
+			return (card.getArrows()[EnumTriangle.DOWN.getIndex()] > boardCards.get(model.getKey(x, y))
+					.getArrows()[EnumTriangle.UP.getIndex()] && isAllowed) ? true : false;
+
+		default:
+			if (x == 4)
+				return false;
+			if (x < 5 && boardCards.get(model.getKey(x + 1, y)) != null) {
+				isAllowed = pushIsAllowed(x + 1, y, EnumTriangle.LEFT, card);
+			}
+			return (card.getArrows()[EnumTriangle.LEFT.getIndex()] > boardCards.get(model.getKey(x, y))
+					.getArrows()[EnumTriangle.RIGHT.getIndex()] && isAllowed) ? true : false;
 		}
 
 	}
@@ -143,7 +214,7 @@ public class MatchC {
 	 */
 	public void placeCard(int x, int y, EnumCards card) {
 		turn = true;
-		if (model.placeIsAllowed(x, y) || card != null) {
+		if (placeIsAllowed(x, y) || card != null) {
 			/*
 			 * I send this piece of information only if i didn't receive it from the other
 			 * player and I actually placed a card on the board and NOT back to my own bench
@@ -181,6 +252,32 @@ public class MatchC {
 	}
 
 	/**
+	 * This method checks if a card can be placed in a certain position.
+	 * 
+	 * The placements is considered invalid if the player tries to put the card onto
+	 * a gem even if the gem has not been claimed yet.
+	 * 
+	 * @param x : int - first coordinate of the card that need to be placed
+	 * @param y : int - second coordinate of the card that need to be placed
+	 * @return isAllowed : boolean - the value represents if the placement is
+	 *         allowed or is illegal
+	 */
+	public boolean placeIsAllowed(int x, int y) {
+		if (y != -1) {
+			boolean isThereAGem = false;
+			for (Integer[] gem : model.getGems()) {
+				if (gem[0] == x && gem[1] == y) {
+					isThereAGem = true;
+					break;
+				}
+			}
+			return !isThereAGem;
+		} else {
+			return model.getP1Cards().get(x - 1) == null ? true : false;
+		}
+	}
+
+	/**
 	 * If it is the player's turn this method checks if the card that has been
 	 * clicked it is selectable at the moment.
 	 * 
@@ -191,7 +288,7 @@ public class MatchC {
 	 */
 	public void pickUpCard(int i) {
 		if (turn) {
-			if (model.pickUpIsAllowed()) {
+			if (pickUpIsAllowed()) {
 				model.pickUpCard(i);
 				reload();
 			} else {
@@ -200,6 +297,17 @@ public class MatchC {
 		} else {
 			System.out.println(UtilityClass.WRONG_TURN);
 		}
+	}
+	
+	/**
+	 * If the player has already selected is not able to pick up another one.
+	 * 
+	 * This method checks if this condition is respected.
+	 * 
+	 * @return isAbleToPickUp : boolean - is the player able to pick up a card at the moment
+	 */
+	public boolean pickUpIsAllowed() {
+		return model.getSelectedCard() == null ? true : false;
 	}
 
 	/**
@@ -232,27 +340,100 @@ public class MatchC {
 	 * 
 	 * As it checks if the game is over it also determines the winner.
 	 */
-	private static void isGameOver() {
-		int winner = model.isGameOver();
-		String result = "";
-		switch (winner) {
-		case 1:
-			result = UtilityClass.WIN_MESSAGE;
-			break;
-		case 0:
-			result = UtilityClass.DRAW_MESSAGE;
-			break;
-		case 2:
-			result = UtilityClass.LOSS_MESSAGE;
-			break;
-		default:
-			break;
+	public static void isGameOver() {
+		/*
+		 * Checks if there are any available moves to the player with the cards that are
+		 * given to him at the moment
+		 */
+		boolean availableMoves = false;
+		for (Map.Entry<Integer, EnumCards> card : model.getP1Cards().entrySet()) {
+			for (int i = 1; i < 4; i++) {
+				for (int j = 1; j < 4; j++) {
+					for (EnumTriangle direction : EnumTriangle.values()) {
+						if (!model.getBoardCards().containsKey(model.getKey(i, j))) {
+							if (!isThereAGem(i, j)) {
+								availableMoves = true;
+							}
+						} else if (pushIsAllowed(i, j, direction, card.getValue())) {
+							availableMoves = true;
+						}
+					}
+				}
+			}
 		}
-		if (winner != -1) {
+
+		/*
+		 * Check if all the gems are been claimed
+		 */
+		boolean areGemsTaken = true;
+		for (Integer[] gem : model.getGems()) {
+			if (model.getBoardCards().get(model.getKey(gem[0], gem[1])) == null) {
+				areGemsTaken = false;
+				break;
+			}
+		}
+
+		if (!availableMoves || areGemsTaken) {
+			String result = "";
+			switch (declareWinner()) {
+			case 1:
+				result = UtilityClass.WIN_MESSAGE;
+				break;
+			case 0:
+				result = UtilityClass.DRAW_MESSAGE;
+				break;
+			case 2:
+				result = UtilityClass.LOSS_MESSAGE;
+				break;
+			}
 			MatchV.frame.setVisible(false);
 			EntryPoint.endScreen.frame.setVisible(true);
 			EndV.setResult(result);
 		}
+	}
+
+	/**
+	 * Checks if in a certain position on the board there is a gem
+	 * 
+	 * @param x : int - first coordinate
+	 * @param y : int - second coordinate
+	 * @return isThereAGem : boolean
+	 */
+	private static boolean isThereAGem(int x, int y) {
+		for (Integer[] gem : model.getGems()) {
+			if (gem[0] == x && gem[1] == y) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Based on the number of gems claimed by each player at the moment this method
+	 * is called it determines which one is the winner.
+	 * 
+	 * @return winner : int - the index of the winning player
+	 */
+	private static int declareWinner() {
+		int p1Points = 0;
+		int p2Points = 0;
+		for (Integer[] gem : model.getGems()) {
+			if (model.getBoardCards().get(model.getKey(gem[0], gem[1])) != null) {
+				if (model.getBoardCards().get(model.getKey(gem[0], gem[1])).getPlayer() == 1) {
+					p1Points++;
+				} else {
+					p2Points++;
+				}
+			}
+		}
+		if (p1Points > p2Points) {
+			return 1;
+		} else if (p1Points == p2Points) {
+			return 0;
+		} else {
+			return 2;
+		}
+
 	}
 
 	/**
@@ -271,8 +452,8 @@ public class MatchC {
 	 * model.
 	 * 
 	 * @param nGem : int - Which gem coordinates are being passed
-	 * @param x : int - First coordinate of the gem on the board
-	 * @param y : int - Second coordinate of the gem on the board
+	 * @param x    : int - First coordinate of the gem on the board
+	 * @param y    : int - Second coordinate of the gem on the board
 	 */
 	public void setGem(int nGem, int x, int y) {
 		model.setGem(nGem, x, y);
