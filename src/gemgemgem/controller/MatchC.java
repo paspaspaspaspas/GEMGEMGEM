@@ -16,16 +16,16 @@ import gemgemgem.view.EndV;
 import gemgemgem.view.MatchV;
 
 /**
- * This class acts as the controller of the MVC architecture of the program.
+ * This class acts as the controller of the MVC architecture of the program.</br>
  * 
  * It links together the model and the view: it gets informations for the former
- * and listen and refresh the latter.
+ * and listen and refresh the latter.</br></br>
  * 
  * The communication with the model happens directly trough the invocation of
  * specific methods and the responses are given thanks to the return values.
  * With the view the link is more complex: the controller refresh the data of
  * the view with a specific method, but the information that come from the view
- * to the controller are vehiculated with event's listeners.
+ * to the controller are vehiculated with event's listeners.</br></br>
  * 
  * The controller it also communicates with the net protocol connected to it,
  * trading informations and messages.
@@ -92,10 +92,10 @@ public class MatchC {
 
 	/**
 	 * Checks if a move that is going to push some cards on the board is actually
-	 * allowed by the rules and, if so, it execute it.
+	 * allowed by the rules and, if so, it execute it.</br>
 	 * 
 	 * In case that is not allowed it print a message on the console that signals to
-	 * the player the impossibility of making the move happen.
+	 * the player the impossibility of making the move happen.</br></br>
 	 * 
 	 * This method is both used after the request of a move from the view and from
 	 * the protocol. There is a difference though: in the second case the move is
@@ -137,7 +137,7 @@ public class MatchC {
 
 	/**
 	 * Before executing a move and modify the model, thanks to this method, the
-	 * controller checks if the move is actually allowed.
+	 * controller checks if the move is actually allowed.</br></br>
 	 * 
 	 * In order to do so it confronts the strength of the pushing arrow of the card
 	 * that the player is trying to place with the opposing arrows of the card
@@ -203,7 +203,7 @@ public class MatchC {
 	}
 
 	/**
-	 * It places a card in given coordinates. This method is only used when the cell
+	 * It places a card in given coordinates.</br> This method is only used when the cell
 	 * selected in empty. In case this wasn't true, it prints out an error.
 	 * 
 	 * @param x    : int - first coordinate of the cell where i want to place the
@@ -235,9 +235,9 @@ public class MatchC {
 	 * method. It works the same way, but it is only used when the request is coming
 	 * from the other player and it simulates the draw of the adversary. It is also
 	 * used when the two players are synchronizing the informations at the start of
-	 * the match.
+	 * the match.</br></br>
 	 * 
-	 * It has to be implemented in a different method because it has to adjurn the
+	 * It has to be implemented in a different method because it has to adjourn the
 	 * player value of the EnumCard placed.
 	 * 
 	 * @param x      : int - coordinate of the card that need to be placed on the
@@ -252,7 +252,7 @@ public class MatchC {
 	}
 
 	/**
-	 * This method checks if a card can be placed in a certain position.
+	 * This method checks if a card can be placed in a certain position.</br>
 	 * 
 	 * The placements is considered invalid if the player tries to put the card onto
 	 * a gem even if the gem has not been claimed yet.
@@ -279,7 +279,7 @@ public class MatchC {
 
 	/**
 	 * If it is the player's turn this method checks if the card that has been
-	 * clicked it is selectable at the moment.
+	 * clicked it is selectable at the moment.</br>
 	 * 
 	 * In case one of these two conditions are not met, it prints out an error
 	 * message.
@@ -300,7 +300,7 @@ public class MatchC {
 	}
 	
 	/**
-	 * If the player has already selected is not able to pick up another one.
+	 * If the player has already selected is not able to pick up another one.</br>
 	 * 
 	 * This method checks if this condition is respected.
 	 * 
@@ -320,8 +320,8 @@ public class MatchC {
 
 	/**
 	 * Finds out which protocol if being used by the controller and send it a
-	 * message with the informations of a single move executed. The turn is ended
-	 * after a message is sent.
+	 * message with the informations of a single move executed. </br>
+	 * The turn is ended after a message is sent.
 	 * 
 	 * @param message : String - informations about a move
 	 */
@@ -336,7 +336,7 @@ public class MatchC {
 
 	/**
 	 * Checks if the game is ended and in that case make the program progress to the
-	 * next portion of the game: the winner announcement and the play again request.
+	 * next portion of the game: the winner announcement and the play again request.</br>
 	 * 
 	 * As it checks if the game is over it also determines the winner.
 	 */

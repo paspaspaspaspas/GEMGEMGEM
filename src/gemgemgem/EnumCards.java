@@ -7,7 +7,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 /**
- * This enum class contains all the different cards available to the player.
+ * This enum class contains all the different cards available to the player.</br>
  * Each one of them is characterized by the strengh with they can push in each direction and
  * the index of the player that owns it in this game.
  * 
@@ -92,7 +92,7 @@ public enum EnumCards {
 	
 	//CONSTRUCTOR
 	/**
-	 * Constructs each EnumCards value.
+	 * Constructs each EnumCards value.</br>
 	 * The player value is set by default to -1; this attribute will be refresh as one of
 	 * the players actually draw that card.
 	 * 
@@ -119,7 +119,7 @@ public enum EnumCards {
 	//METHODS
 	
 	/**
-	 * This method returns the image linked to a specific EnumCard based on the name.
+	 * This method returns the image linked to a specific EnumCard based on the name.</br>
 	 * It also selects a different version of the same image (blue or red) depending on which
 	 * player owns that card.
 	 * 

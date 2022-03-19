@@ -31,5 +31,5 @@ public class UtilityClass {
 	
 	//ERRORS
 	public static final String GET_IMAGE_ERROR = "[System] : THERE WAS AN ERROR RETRIVING AN IMAGE";
-
+	public static final String COMMUNICATION_ERROR = "[System] : THERE HAS BEEN A COMMUNICATION ERROR";
 }

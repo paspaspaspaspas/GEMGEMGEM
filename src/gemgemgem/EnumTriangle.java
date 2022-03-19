@@ -2,7 +2,7 @@ package gemgemgem;
 
 /**
  * This enum class represents the arrow pointer that shows up once a card on the
- * board is hovered while holding another card.
+ * board is hovered while holding another card.</br>
  * The attribute linked with each value shows which arrow will oppose to this direction
  * of insertion.
  * 

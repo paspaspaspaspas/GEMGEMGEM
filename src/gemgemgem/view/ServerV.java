@@ -87,7 +87,9 @@ public class ServerV {
 		btnClient.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.setVisible(false);
-				Client c = new Client();
+				String ip = parseIp(txtIpAdress.getText());
+				int port = parsePort(txtPort.getText());
+				Client c = new Client(ip, port);
 				Thread cThread = new Thread(c);
 				cThread.start();
 			}
@@ -101,7 +103,8 @@ public class ServerV {
 		btnServer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.setVisible(false);
-				s = new Server();
+				int port = parsePort(txtPort.getText());
+				s = new Server(port);
 				Thread sThread = new Thread(s);
 				sThread.start();
 			}
@@ -132,20 +135,20 @@ public class ServerV {
 		panel.add(panel_1, BorderLayout.SOUTH);
 		panel_1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		JLabel lblNewLabel = new JLabel("Joining a server? IP adress:");
+		JLabel lblNewLabel = new JLabel("Joining a server? IP:");
 		panel_1.add(lblNewLabel);
 		
 		txtIpAdress = new JTextField();
-		txtIpAdress.setText("127.0.0.1");
+		txtIpAdress.setText("default");
 		txtIpAdress.setHorizontalAlignment(SwingConstants.CENTER);
 		panel_1.add(txtIpAdress);
 		txtIpAdress.setColumns(10);
 		
-		JLabel lblNewLabel_1 = new JLabel("Port: ");
-		panel_1.add(lblNewLabel_1);
+		JLabel portLbl = new JLabel("Set port: ");
+		panel_1.add(portLbl);
 		
 		txtPort = new JTextField();
-		txtPort.setText("1234");
+		txtPort.setText("default");
 		txtPort.setHorizontalAlignment(SwingConstants.CENTER);
 		panel_1.add(txtPort);
 		txtPort.setColumns(10);
@@ -153,6 +156,22 @@ public class ServerV {
 	
 	public static Server getServer() {
 		return s;
+	}
+	
+	private String parseIp(String input) {
+		if(input.equals("default")) {
+			return "127.0.0.1";
+		} else {
+			return input;
+		}
+	}
+	
+	private int parsePort(String port) {
+		if(port.equals("default")) {
+			return 1234;
+		}else {
+			return Integer.parseInt(port);
+		}
 	}
 
 	

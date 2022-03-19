@@ -5,9 +5,9 @@ import java.util.ArrayList;
 
 /**
  * It contains all the informations that are necessary to the view in order to
- * visualize the current model.
+ * visualize the current model.</br>
  * 
- * Istances of this class will be created by the model in order to be a
+ * Instances of this class will be created by the model in order to be a
  * container that the controller will forward toward the view.
  * 
  * @author pas

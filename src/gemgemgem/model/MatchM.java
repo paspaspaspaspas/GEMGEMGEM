@@ -14,7 +14,7 @@ import gemgemgem.UtilityClass;
 import gemgemgem.controller.MatchC;
 
 /**
- * It is the model class in the MVC architecture of this program.
+ * It is the model class in the MVC architecture of this program.</br></br>
  * 
  * First of all, it contains all the information describing the state of the
  * game and the methods needed to refresh it.
@@ -131,7 +131,7 @@ public class MatchM {
 
 	/**
 	 * Creates a ModelInfo's object that describes all the informations contained in
-	 * the model.
+	 * the model.</br>
 	 * 
 	 * It is used by the controller to synchronize the view to the model.
 	 * 
@@ -157,7 +157,7 @@ public class MatchM {
 	}
 
 	/**
-	 * It generate and return a card from the EnumCards' pool.
+	 * It generate and return a card from the EnumCards' pool.</br>
 	 * 
 	 * If the card it has already been drawn it is considered not valid.
 	 * 
@@ -177,7 +177,7 @@ public class MatchM {
 
 	/**
 	 * It execute a move that pushes cards refreshing the attibutes that describes
-	 * the state of the game.
+	 * the state of the game.</br>
 	 * 
 	 * Since with a single placement of a card could move more than one card, if it
 	 * is the case, the method call itself recursively.
@@ -249,7 +249,7 @@ public class MatchM {
 	}
 
 	/**
-	 * It places a card in the bench of one of the player.
+	 * It places a card in the bench of one of the player.</br></br>
 	 * 
 	 * This method is separated from the placeCard(int, int, EnumCards) because is
 	 * only used at the start of the match to synchronize the two players and
