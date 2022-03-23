@@ -29,14 +29,37 @@ import java.awt.FlowLayout;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 
+/**
+ * This class represents the window that lets the player create or join a lobby.
+ * 
+ * @author pas
+ *
+ */
 public class ServerV {
 
+	//ATTRIBUTES
 	static JFrame frame;
 	static JPanel panel;
 	private static Server s = null;
 	private JTextField txtIpAdress;
 	private JTextField txtPort;
 
+	
+
+	//CONSTRUCTOR
+	/**
+	 * Create the application.
+	 */
+	public ServerV() {
+		initialize();
+	}
+	
+	//GETTERS AND SETTERS
+	public static Server getServer() {
+		return s;
+	}
+
+	//METHODS
 	/**
 	 * Launch the application.
 	 */
@@ -52,14 +75,7 @@ public class ServerV {
 			}
 		});
 	}
-
-	/**
-	 * Create the application.
-	 */
-	public ServerV() {
-		initialize();
-	}
-
+	
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -154,18 +170,25 @@ public class ServerV {
 		txtPort.setColumns(10);
 	}
 	
-	public static Server getServer() {
-		return s;
-	}
 	
-	private String parseIp(String input) {
-		if(input.equals("default")) {
+	/**
+	 * Given the desired IP address to connect to this method parses it.
+	 * @param ipAddress : String - IP address to parse
+	 * @return ipAddressParsed : String - IP address to connect to
+	 */
+	private String parseIp(String ipAddress) {
+		if(ipAddress.equals("default")) {
 			return "127.0.0.1";
 		} else {
-			return input;
+			return ipAddress;
 		}
 	}
 	
+	/**
+	 * Given the desired port to open to connection or to connect to this method parses it.
+	 * @param port : String - the port as a String
+	 * @return portParsed : int - port number to connect to
+	 */
 	private int parsePort(String port) {
 		if(port.equals("default")) {
 			return 1234;

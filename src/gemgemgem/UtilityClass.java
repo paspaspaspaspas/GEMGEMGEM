@@ -29,6 +29,9 @@ public class UtilityClass {
 	public static final String PLACE_COMMAND = "PLACE %d %d %s";
 	public static final String PUSH_COMMAND = "PUSH %d %d %s %s";
 	
+	//VIEW
+	public static final int CELL_PER_SIDE = 5;
+	
 	//ERRORS
 	public static final String GET_IMAGE_ERROR = "[System] : THERE WAS AN ERROR RETRIVING AN IMAGE";
 	public static final String COMMUNICATION_ERROR = "[System] : THERE HAS BEEN A COMMUNICATION ERROR";

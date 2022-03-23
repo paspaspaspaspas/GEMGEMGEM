@@ -10,48 +10,32 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
-import java.util.Random;
 
-import gemgemgem.EnumCards;
 import gemgemgem.EnumTriangle;
 
 /**
- * Rappresenta la view una carta generica posizionata sul terreno di gioco.
+ * Represents the view of a generic cell that constitutes the board.
  * 
- * @author pasos
- *
+ * This class is a bit more complex than the other cells' view since it has to
+ * act based on the mouse position when it is hovered. In fact it will
+ * represents the direction of the push if a card is going to be placed in a
+ * determinate position.
+ * 
+ * @author pas
  */
-public class BoardCardV extends CardV implements MouseListener, MouseMotionListener {
+public class BoardCellV extends CellV implements MouseListener, MouseMotionListener {
 
-	boolean mouseOverCard = false;
+	// ATTRIBUTES
+	boolean mouseOverCell = false;
 	boolean hasGem = false;
 	Point mousePosition;
 
-	// COSTRUTTORE
-	public BoardCardV(BufferedImage image) {
+	// CONSTRUCTOR
+	public BoardCellV(BufferedImage image) {
 		super(Color.CYAN, Color.BLUE, true, image);
 	}
 
-	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		Graphics2D g2 = (Graphics2D) g;
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2.setStroke(new BasicStroke(4f));
-
-		if (hasGem) {
-			g2.setColor(Color.GREEN);
-			g2.fillOval(this.getWidth() / 3, this.getHeight() * 3 / 10, this.getWidth() / 3, this.getHeight() * 2 / 5);
-			g2.setColor(Color.BLUE);
-			g2.drawOval(this.getWidth() / 3, this.getHeight() * 3 / 10, this.getWidth() / 3, this.getHeight() * 2 / 5);
-		}
-
-		// QUESTA CONDIZIONE SI PUO' MIGLIORARE?
-		if (mouseOverCard && this.getImage() != null && MatchV.selectedCard.getImage() != null) {
-			drawTriangleHovered(g2, mousePosition);
-		}
-
-	}
-
+	// GETTERS AND SETTERS
 	public boolean hasGem() {
 		return hasGem;
 	}
@@ -60,6 +44,41 @@ public class BoardCardV extends CardV implements MouseListener, MouseMotionListe
 		this.hasGem = hasGem;
 	}
 
+	// METHODS
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		Graphics2D g2 = (Graphics2D) g;
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2.setStroke(new BasicStroke(4f));
+
+		/**
+		 * If a gem is placed on the cell it has to be drawn.
+		 */
+		if (hasGem) {
+			g2.setColor(Color.GREEN);
+			g2.fillOval(this.getWidth() / 3, this.getHeight() * 3 / 10, this.getWidth() / 3, this.getHeight() * 2 / 5);
+			g2.setColor(Color.BLUE);
+			g2.drawOval(this.getWidth() / 3, this.getHeight() * 3 / 10, this.getWidth() / 3, this.getHeight() * 2 / 5);
+		}
+
+		/*
+		 * Only if the player has selected a card and want to place it on top of another
+		 * one already placed making it slide it is necessary to draw the directions of
+		 * an eventual push.
+		 */
+		if (mouseOverCell && this.getImage() != null && MatchV.selectedCard.getImage() != null) {
+			drawTriangleHovered(g2, mousePosition);
+		}
+
+	}
+
+	/**
+	 * Based on the mouse position, this method is able to determine which portion
+	 * of the cell is hovered and draw the subsequent triangle.
+	 * 
+	 * @param g2            : Graphics2D - it lets the method draw the triangle
+	 * @param mousePosition : Point - the coordinates of the mouse on the cell
+	 */
 	private void drawTriangleHovered(Graphics2D g2, Point mousePosition) {
 		Point p1;
 		Point p2;
@@ -87,6 +106,16 @@ public class BoardCardV extends CardV implements MouseListener, MouseMotionListe
 		drawTriangle(g2, p1, p2, p3);
 	}
 
+	/**
+	 * Thanks to the mouse position, it determines which EnumTriangle is being
+	 * considered and returns it.
+	 * 
+	 * The different sections of the cell, each one linked to a different triangle,
+	 * are the four zones created by the two diagonals of the cell.
+	 * 
+	 * @param mousePosition : Point - the coordinates of the mouse on the cell.
+	 * @return triangle : EnumTriangle - which triangle is being hovered
+	 */
 	public EnumTriangle whichTriangle(Point mousePosition) {
 		double x = mousePosition.getX();
 		double y = mousePosition.getY();
@@ -101,6 +130,14 @@ public class BoardCardV extends CardV implements MouseListener, MouseMotionListe
 		}
 	}
 
+	/**
+	 * Given the vertices of a triangle, this method draws it.
+	 * 
+	 * @param g2 : Graphics2D - object used to draw
+	 * @param p1 : Point - coordinates of the first vertex
+	 * @param p2 : Point - coordinates of the second vertex
+	 * @param p3 : Point - coordinates of the third vertex
+	 */
 	private void drawTriangle(Graphics2D g2, Point p1, Point p2, Point p3) {
 		int[] xPoints = { (int) p1.getX(), (int) p2.getX(), (int) p3.getX() };
 		int[] yPoints = { (int) p1.getY(), (int) p2.getY(), (int) p3.getY() };
@@ -108,14 +145,23 @@ public class BoardCardV extends CardV implements MouseListener, MouseMotionListe
 		g2.fillPolygon(xPoints, yPoints, 3);
 	}
 
+	/**
+	 * When the mouse is not hovering the cell anymore this method refresh the card.
+	 * This way the triangle representing the direction of the push disappears as
+	 * the mouse leaves the cell.
+	 */
 	public void mouseExited(MouseEvent e) {
-		mouseOverCard = false;
+		mouseOverCell = false;
 		this.repaint();
 	}
 
+	/**
+	 * When the mouse is moved onto this cell, this method acknowledges its presence
+	 * and gets the mouse position in order to be able to draw the right triangle.
+	 */
 	public void mouseMoved(MouseEvent e) {
 		super.mouseMoved(e);
-		mouseOverCard = true;
+		mouseOverCell = true;
 		mousePosition = e.getPoint();
 		this.repaint();
 	}

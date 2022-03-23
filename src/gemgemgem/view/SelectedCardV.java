@@ -5,30 +5,40 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
-import gemgemgem.EnumCards;
-
 /**
- * Rappresenta la view della carta selezionata dall'utente.
- * Qualora nessuna carta sia stata selezionata rappresenta un puntatore.
+ * It represents the card selected by the player or, in case no card has been
+ * selected, the mouse pointer.
  * 
- * @author pasos
+ * @author pas
  *
  */
-public class SelectedCardV extends CardV {
+public class SelectedCardV extends CellV {
 
-	//ATTRIBUTI
+	// ATTRIBUTES
 	private boolean isSelected;
 
-	//COSTRUTTORE
+	// CONSTRUCTOR
 	public SelectedCardV(BufferedImage image) {
 		super(Color.PINK, Color.MAGENTA, false, image);
 		this.isSelected = false;
 	}
 
-	//METODI
+	// GETTERS AND SETTERS
+	public boolean isSelected() {
+		return isSelected;
+	}
+
+	public void setSelected(boolean isSelected) {
+		this.isSelected = isSelected;
+	}
+
+	// METHODS
+	/**
+	 * It draw the component in 2 different ways: the selected card if there is one
+	 * or the mouse pointer.
+	 */
 	protected void paintComponent(Graphics g) {
 		if (isSelected) {
 			super.paintComponent(g);
@@ -42,28 +52,31 @@ public class SelectedCardV extends CardV {
 
 	}
 
-	public boolean isSelected() {
-		return isSelected;
-	}
-
-	public void setSelected(boolean isSelected) {
-		this.isSelected = isSelected;
-	}
-	
+	/**
+	 * It deselects the current card switching to the representation of the mouse pointer
+	 */
 	public void deselected() {
 		this.setSelected(false);
 		this.setImage(null);
 	}
-	
+
+	/**
+	 * Make the image passed the card selected
+	 * @param image : BufferedImage - the image of the selected card
+	 */
 	public void selected(BufferedImage image) {
 		this.setSelected(true);
 		this.setImage(image);
 	}
 
+	/**
+	 * After receiving new informations by the controller it implements them.
+	 * @param selectedCard : BufferedImage - the image of the selected card
+	 */
 	public void reload(BufferedImage selectedCard) {
-		if(selectedCard != null) {		
+		if (selectedCard != null) {
 			this.selected(selectedCard);
-		}else {
+		} else {
 			this.deselected();
 		}
 		this.repaint();

@@ -12,53 +12,92 @@ import java.awt.image.BufferedImage;
 import javax.swing.JComponent;
 
 import gemgemgem.EnumTriangle;
+import gemgemgem.UtilityClass;
 
+/**
+ * This class represents the board's view that is constituted by a 3x3 grid and
+ * a graveyard.
+ * 
+ * Even if the two aforementioned zones are different are both saved with a 5x5
+ * matrix that contains CellV objects. In relation of the position the CellV
+ * instance will also be a GraveyardCellV or a BoardCellV.
+ * 
+ * This method is also responsible of communicating with the controller through
+ * the MouseListener the action performed by the player onto the board.
+ * 
+ * @author pas
+ *
+ */
 public class BoardV extends JComponent implements MouseListener {
 
-	private int cardsPerSides = 5;
+	// ATTRIBUTES
+	private int cellsPerSide = UtilityClass.CELL_PER_SIDE;
 	private int dimCard;
-	public static CardV[][] cards;
+	public static CellV[][] cells;
 
+	// CONSTRUCTOR
 	public BoardV() {
 		setPreferredSize(new Dimension(500, 500));
-		cards = new CardV[cardsPerSides][cardsPerSides];
-		for (int i = 0; i < cardsPerSides; i++) {
-			for (int j = 0; j < cardsPerSides; j++) {
-				if ((i == 0 && j == 0) || (i == 0 && j == cardsPerSides - 1) || (i == cardsPerSides - 1 && j == 0)
-						|| (i == cardsPerSides - 1 && j == cardsPerSides - 1))
-					cards[i][j] = new CardV(false);
-				else if (i == 0 || j == 0 || i == cardsPerSides - 1 || j == cardsPerSides - 1)
-					cards[i][j] = new GraveyardCardV(
-							MatchV.info.getImagesBoard()[i][j] == null ? null : MatchV.info.getImagesBoard()[i][j]);
-				else
-					cards[i][j] = new BoardCardV(
-							MatchV.info.getImagesBoard()[i][j] == null ? null : MatchV.info.getImagesBoard()[i][j]);
-				this.add(cards[i][j]);
-			}
-		}
+		cells = new CellV[cellsPerSide][cellsPerSide];
 
+		createCells();
 		setGems();
 
-		for (CardV[] cardRow : cards) {
-			for (CardV card : cardRow) {
-				if (card instanceof BoardCardV) {
+		for (CellV[] cardRow : cells) {
+			for (CellV card : cardRow) {
+				if (card instanceof BoardCellV) {
 					card.addMouseListener(this);
 				}
 			}
 		}
 	}
 
-	protected void setGems() {
-		for(int i = 1; i < 4; i++) {
-			for(int j = 1; j < 4; j++) {
-				((BoardCardV) cards[i][j]).setHasGem(false);
+	// SETTERS AND GETTERS
+
+	// METHODS
+	/**
+	 * Thanks to this method the elements on the board are created from scratch or
+	 * from the informations given by the controller.
+	 */
+	protected void createCells() {
+		for (int i = 0; i < cellsPerSide; i++) {
+			for (int j = 0; j < cellsPerSide; j++) {
+				/*
+				 * The board contains 3 types of cells: -the corner cells (that don't need to be
+				 * represented) -the graveyard cells -the board cells
+				 */
+				if ((i == 0 && j == 0) || (i == 0 && j == cellsPerSide - 1) || (i == cellsPerSide - 1 && j == 0)
+						|| (i == cellsPerSide - 1 && j == cellsPerSide - 1))
+					cells[i][j] = new CellV();
+				else if (i == 0 || j == 0 || i == cellsPerSide - 1 || j == cellsPerSide - 1)
+					cells[i][j] = new GraveyardCellV(
+							MatchV.info.getImagesBoard()[i][j] == null ? null : MatchV.info.getImagesBoard()[i][j]);
+				else
+					cells[i][j] = new BoardCellV(
+							MatchV.info.getImagesBoard()[i][j] == null ? null : MatchV.info.getImagesBoard()[i][j]);
+				this.add(cells[i][j]);
 			}
-		}
-		for (Integer[] gem : MatchV.info.getGems()) {
-			((BoardCardV) cards[gem[0]][gem[1]]).setHasGem(true);
 		}
 	}
 
+	/**
+	 * This method place the gems on the correct cells based on the informations
+	 * given by the controller.
+	 */
+	protected void setGems() {
+		for (int i = 1; i < 4; i++) {
+			for (int j = 1; j < 4; j++) {
+				((BoardCellV) cells[i][j]).setHasGem(false);
+			}
+		}
+		for (Integer[] gem : MatchV.info.getGems()) {
+			((BoardCellV) cells[gem[0]][gem[1]]).setHasGem(true);
+		}
+	}
+
+	/**
+	 * This method is responsible to paint the whole board.
+	 */
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g;
@@ -66,25 +105,51 @@ public class BoardV extends JComponent implements MouseListener {
 		setCards();
 	}
 
+	/**
+	 * This method calculates the position and the dimension of each cell based on
+	 * the indexes that it has in the cells matrix.
+	 */
 	private void setCards() {
-		dimCard = (int) (Math.min(this.getWidth(), this.getHeight()) / 6);
-		int paddingX = (this.getWidth() - dimCard * cardsPerSides) / 2;
-		int paddingY = (this.getHeight() - dimCard * cardsPerSides) / 2;
-		for (int i = 0; i < cardsPerSides; i++) {
-			for (int j = 0; j < cardsPerSides; j++) {
-				if (cards[i][j].isVisible())
-					cards[i][j].setBounds(i * dimCard + paddingX, j * dimCard + paddingY, dimCard, dimCard);
+		dimCard = (int) (Math.min(this.getWidth(), this.getHeight()) / (cellsPerSide + 1));
+		int paddingX = (this.getWidth() - dimCard * cellsPerSide) / 2;
+		int paddingY = (this.getHeight() - dimCard * cellsPerSide) / 2;
+		for (int i = 0; i < cellsPerSide; i++) {
+			for (int j = 0; j < cellsPerSide; j++) {
+				/*
+				 * I don't need to set the corner cells.
+				 */
+				if (cells[i][j].isVisible())
+					cells[i][j].setBounds(i * dimCard + paddingX, j * dimCard + paddingY, dimCard, dimCard);
 			}
 		}
 	}
 
+	/**
+	 * When the board need to be reloaded this method is called.
+	 * 
+	 * It refresh the images of each cell and the position of the gems. This second
+	 * action is only used at the start of the program when the second player needs
+	 * to be informed about the game state.
+	 * 
+	 * @param images : BufferedImage[][] - all the images of the cells
+	 */
+	public void reload(BufferedImage[][] images) {
+		for (int i = 0; i < cellsPerSide; i++) {
+			for (int j = 0; j < cellsPerSide; j++) {
+				cells[i][j].setImage(images[i][j]);
+			}
+		}
+		setGems();
+		this.repaint();
+	}
+
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		BoardCardV cardClicked = (BoardCardV) e.getComponent();
+		BoardCellV cardClicked = (BoardCellV) e.getComponent();
 		Point mousePosition = e.getPoint();
-		for (int i = 1; i < cardsPerSides - 1; i++) {
-			for (int j = 1; j < cardsPerSides - 1; j++) {
-				if (cardClicked == cards[i][j]) {
+		for (int i = 1; i < cellsPerSide - 1; i++) {
+			for (int j = 1; j < cellsPerSide - 1; j++) {
+				if (cardClicked == cells[i][j]) {
 					if (MatchV.selectedCard.getImage() != null && cardClicked.getImage() != null) {
 						EnumTriangle direction = cardClicked.whichTriangle(mousePosition);
 						MatchV.controller.executeMove(i, j, direction, null);
@@ -96,38 +161,31 @@ public class BoardV extends JComponent implements MouseListener {
 		}
 	}
 
-	@Override
+	/**
+	 * Unused
+	 */
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
-	@Override
+	/**
+	 * Unused
+	 */
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
-	@Override
+	/**
+	 * Unused
+	 */
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
-	@Override
+	/**
+	 * Unused
+	 */
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
 
-	}
-
-	public void reload(BufferedImage[][] images) {
-		for(int i = 0; i < cardsPerSides; i++) {
-			for(int j = 0; j < cardsPerSides; j++) {
-				cards[i][j].setImage(images[i][j]);
-			}
-		}
-		setGems();
-		this.repaint();
 	}
 
 }

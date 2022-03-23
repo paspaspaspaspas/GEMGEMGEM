@@ -15,3 +15,4 @@ TODO
 
 -> LA POSSIBILITà DI PAREGGIO NECESSITà DI ALTRO TESTING PERCHè MI è PARSO DESSE SCONFITTA
 	QUANDO ERA PAREGGIO.
+-> I listener della view dovrebbero essere nel controller e non nella view.

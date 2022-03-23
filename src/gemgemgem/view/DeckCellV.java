@@ -1,20 +1,20 @@
 package gemgemgem.view;
 
 import java.awt.Color;
-import java.awt.image.BufferedImage;
 
 import gemgemgem.EnumImagesUtility;
 
 /**
- * Rappresenta la view di una carta generica ancora posizionata nel mazzo.
+ * It represents the view of a generic cell that constitutes the deck back of
+ * either of the players.
  * 
- * @author pasos
+ * @author pas
  *
  */
-public class DeckCardV extends CardV {
+public class DeckCellV extends CellV {
 
-	// COSTRUTTORE
-	public DeckCardV(int player) {
+	// CONSTRUCTOR
+	public DeckCellV(int player) {
 		super(Color.BLACK, Color.LIGHT_GRAY, false,
 				player == 1 ? EnumImagesUtility.BLUE_BACK.getImage() : EnumImagesUtility.RED_BACK.getImage());
 	}

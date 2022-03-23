@@ -9,35 +9,36 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 
-import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 
-import gemgemgem.EnumCards;
-
 /**
- * Rappresenta le caratteristiche base di una carta del gioco, comuni a
- * prescindere dal posizionamento della stessa.
+ * It contains the characteristics of any cell (colors, image, visibility...).
+ * </br>
+ * </br>
+ * These variables will be modified to be unique in relation of which class will
+ * be extending CellV.
  * 
- * @author pasos
+ * @author pas
  *
  */
-public class CardV extends JComponent implements MouseListener, MouseMotionListener {
+public class CellV extends JComponent implements MouseListener, MouseMotionListener {
 
-	// ATTRIBUTI
+	// ATTRIBUTES
 	private Color mainColor;
 	private Color sidesColor;
 	protected BufferedImage image;
 	private boolean isVisible = true;
-	
 
-	// COSTRUTTORI
-	
-	public CardV(Color mainColor, Color sidesColor, boolean isClickable, BufferedImage image) {
+	// CONSTRUCTORS
+	public CellV(Color mainColor, Color sidesColor, boolean isClickable, BufferedImage image) {
 		this.setMainColor(mainColor);
 		this.setSidesColor(sidesColor);
 		this.image = image;
+		/**
+		 * Not all the cells are clickable so not all the cell will implement
+		 * mouseListeners.
+		 */
 		if (isClickable) {
 			this.addMouseListener(this);
 			this.addMouseMotionListener(this);
@@ -45,36 +46,15 @@ public class CardV extends JComponent implements MouseListener, MouseMotionListe
 	}
 
 	/**
-	 * Costruttore realizzato ad hoc per le carte che occupano le posizioni angolari
-	 * della board, in quanto queste non verranno visualizzate.
-	 * 
-	 * @param isVisible: boolean
+	 * This constructor is used only for the corner of the board. Since they are
+	 * actually cells in the matrix but don't need to be represented, they are
+	 * created in a unique and separate way.
 	 */
-	public CardV(boolean isVisible) {
-		this.isVisible = isVisible;
+	public CellV() {
+		this.isVisible = false;
 	}
 
-	// METODI
-	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		Graphics2D g2 = (Graphics2D) g;
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2.setStroke(new BasicStroke(4f));
-
-		/*
-		 * Qualora la carta in questione abbia un'immagine questa viene disegnata,
-		 * altrimenti la view base della carta è rappresentata
-		 */
-		if (this.image != null) {
-			g2.drawImage(image, 0, 0, getWidth(), getHeight(), this);
-		} else {
-			g2.setColor(getMainColor());
-			g2.fillRect(0, 0, getWidth(), getHeight());
-		}
-		g2.setColor(getSidesColor());
-		g2.drawRect(+2, +2, getWidth() - 4, getHeight() - 4);
-	}
-
+	// GETTERS AND SETTERS
 	public boolean isVisible() {
 		return isVisible;
 	}
@@ -107,42 +87,82 @@ public class CardV extends JComponent implements MouseListener, MouseMotionListe
 		this.image = image;
 	}
 
-	@Override
+	// METODI
+	/**
+	 * This method is going to draw the view of each cell based on the information
+	 * stored such as colors or images.
+	 */
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		Graphics2D g2 = (Graphics2D) g;
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2.setStroke(new BasicStroke(4f));
 
+		/*
+		 * If the cell has a card placed on it (and consequently an image) it will be
+		 * draw, otherwise the basic cell view is represented.
+		 */
+		if (this.image != null) {
+			g2.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+		} else {
+			g2.setColor(getMainColor());
+			g2.fillRect(0, 0, getWidth(), getHeight());
+		}
+		g2.setColor(getSidesColor());
+		/**
+		 * Sides need to be a little larger that the body.
+		 */
+		g2.drawRect(2, 2, getWidth() - 4, getHeight() - 4);
+	}
+
+	/**
+	 * This method will be implemented by the clickable cells in their own unique
+	 * way.
+	 */
 	public void mouseClicked(MouseEvent e) {
 	}
 
-	@Override
+	/**
+	 * Unused
+	 */
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
-	@Override
+	/**
+	 * Unused
+	 */
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
-	@Override
+	/**
+	 * Unused
+	 */
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
-	@Override
+	/**
+	 * Unused
+	 */
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
-	@Override
+	/**
+	 * Unused
+	 */
 	public void mouseDragged(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
+	/**
+	 * When the player is moving the pointer around the screen, either he has a card
+	 * selected or not, this method let the view know the mouse position at all
+	 * times.
+	 */
 	public void mouseMoved(MouseEvent e) {
 		int l = Math.min(MatchV.frame.getContentPane().getHeight(), MatchV.frame.getContentPane().getWidth());
 		if (MatchV.selectedCard.isSelected()) {
