@@ -33,7 +33,7 @@ public class MatchV implements MouseMotionListener {
 	private static BoardV board;
 	private static PlayerV player1;
 	private static PlayerV player2;
-	static SelectedCardV selectedCard;
+	public static SelectedCardV selectedCard;
 
 	protected static ModelInfo info;
 	protected static MatchC controller;
@@ -88,7 +88,6 @@ public class MatchV implements MouseMotionListener {
 
 		frame.getContentPane().addMouseMotionListener(this);
 	}
-
 	/**
 	 * Unused
 	 */
@@ -108,8 +107,8 @@ public class MatchV implements MouseMotionListener {
 					l / 15);
 			selectedCard.setSidesColor(Color.MAGENTA);
 		} else {
-			selectedCard.setBounds((int) (e.getPoint().getX() - l / 100), (int) (e.getPoint().getY() - l / 100), l / 50,
-					l / 50);
+			selectedCard.setBounds((int) (e.getPoint().getX() - l / 80), (int) (e.getPoint().getY() - l / 80), l / 40,
+					l / 40);
 		}
 		selectedCard.repaint();
 	}
@@ -132,6 +131,19 @@ public class MatchV implements MouseMotionListener {
 		player2.reload(info.getImagesP2());
 		board.reload(info.getImagesBoard());
 		selectedCard.reload(info.getSelectedCard());
+	}
+
+	/**
+	 * When the turn change this method refresh the pointer:</br>
+	 * 	- GREEN = it's the player's turn</br>
+	 * 	- RED = it's the adversary's turn
+	 * 
+	 * @param turn : boolean - it represents either it's the player's turn or not
+	 */
+	public void turnPassed(boolean turn) {
+		if(turn) selectedCard.setMainColor(Color.GREEN);
+		else selectedCard.setMainColor(Color.RED);
+		selectedCard.repaint();
 	}
 
 }

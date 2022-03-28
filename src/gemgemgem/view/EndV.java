@@ -72,10 +72,11 @@ public class EndV {
 		rematchBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.setVisible(false);
-				ServerV.frame.setVisible(true);
-				if (ServerV.getServer() != null) {
+				MatchV.frame.setVisible(false);
+				NetV.frame.setVisible(true);
+				if (NetV.getServer() != null) {
 					try {
-						ServerV.getServer().getSocketServer().close();
+						NetV.getServer().getSocketServer().close();
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					}

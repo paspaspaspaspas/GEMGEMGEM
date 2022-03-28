@@ -35,7 +35,7 @@ import javax.swing.JLabel;
  * @author pas
  *
  */
-public class ServerV {
+public class NetV {
 
 	//ATTRIBUTES
 	static JFrame frame;
@@ -50,7 +50,7 @@ public class ServerV {
 	/**
 	 * Create the application.
 	 */
-	public ServerV() {
+	public NetV() {
 		initialize();
 	}
 	
@@ -67,7 +67,7 @@ public class ServerV {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ServerV window = new ServerV();
+					NetV window = new NetV();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();

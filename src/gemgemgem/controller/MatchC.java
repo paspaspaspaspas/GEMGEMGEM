@@ -16,16 +16,19 @@ import gemgemgem.view.EndV;
 import gemgemgem.view.MatchV;
 
 /**
- * This class acts as the controller of the MVC architecture of the program.</br>
+ * This class acts as the controller of the MVC architecture of the
+ * program.</br>
  * 
  * It links together the model and the view: it gets informations for the former
- * and listen and refresh the latter.</br></br>
+ * and listen and refresh the latter.</br>
+ * </br>
  * 
  * The communication with the model happens directly trough the invocation of
  * specific methods and the responses are given thanks to the return values.
  * With the view the link is more complex: the controller refresh the data of
  * the view with a specific method, but the information that come from the view
- * to the controller are vehiculated with event's listeners.</br></br>
+ * to the controller are vehiculated with event's listeners.</br>
+ * </br>
  * 
  * The controller it also communicates with the net protocol connected to it,
  * trading informations and messages.
@@ -55,11 +58,11 @@ public class MatchC {
 	/*
 	 * When a MatchC object is created it generates the model and the view that he
 	 * will coordinate. From this point on though, even if they are communicating,
-	 * the three elements are indipendent.
+	 * the three elements are independent.
 	 */
 	public MatchC() {
 		model = new MatchM(this);
-		// The view is inizialize with the info of the model that i just created.
+		// The view is initialize with the info of the model that i just created.
 		view = new MatchV(model.generateInfo(), this);
 	}
 
@@ -95,7 +98,8 @@ public class MatchC {
 	 * allowed by the rules and, if so, it execute it.</br>
 	 * 
 	 * In case that is not allowed it print a message on the console that signals to
-	 * the player the impossibility of making the move happen.</br></br>
+	 * the player the impossibility of making the move happen.</br>
+	 * </br>
 	 * 
 	 * This method is both used after the request of a move from the view and from
 	 * the protocol. There is a difference though: in the second case the move is
@@ -106,12 +110,12 @@ public class MatchC {
 	 *                  the card
 	 * @param y         : int - second coordinate of the cell where i want to place
 	 *                  the card
-	 * @param direction : EnumTriangle - rapresents the direction in which the card
+	 * @param direction : EnumTriangle - represents the direction in which the card
 	 *                  that wants to be placed is going to push
 	 * @param card      : EnumCards - the card that want to be placed
 	 */
 	public void executeMove(int x, int y, EnumTriangle direction, EnumCards card) {
-		turn = true;
+		passTurn(true);
 		/*
 		 * I need the user's selected card only if the player is the one making the
 		 * move. If the move has already been checked from the other player the card I
@@ -137,7 +141,8 @@ public class MatchC {
 
 	/**
 	 * Before executing a move and modify the model, thanks to this method, the
-	 * controller checks if the move is actually allowed.</br></br>
+	 * controller checks if the move is actually allowed.</br>
+	 * </br>
 	 * 
 	 * In order to do so it confronts the strength of the pushing arrow of the card
 	 * that the player is trying to place with the opposing arrows of the card
@@ -150,7 +155,7 @@ public class MatchC {
 	 *                  the card
 	 * @param y         : int - second coordinate of the cell where i want to place
 	 *                  the card
-	 * @param direction : EnumTriangle - rapresents the direction in which the card
+	 * @param direction : EnumTriangle - represents the direction in which the card
 	 *                  that wants to be placed is going to push
 	 * @param card      : EnumCards - the card that want to be placed
 	 * @return isAllowed : boolean - the value represents if the move is allowed or
@@ -203,8 +208,9 @@ public class MatchC {
 	}
 
 	/**
-	 * It places a card in given coordinates.</br> This method is only used when the cell
-	 * selected in empty. In case this wasn't true, it prints out an error.
+	 * It places a card in given coordinates.</br>
+	 * This method is only used when the cell selected in empty. In case this wasn't
+	 * true, it prints out an error.
 	 * 
 	 * @param x    : int - first coordinate of the cell where i want to place the
 	 *             card
@@ -213,7 +219,7 @@ public class MatchC {
 	 * @param card : EnumCards - card that need to be placed
 	 */
 	public void placeCard(int x, int y, EnumCards card) {
-		turn = true;
+		passTurn(true);
 		if (placeIsAllowed(x, y) || card != null) {
 			/*
 			 * I send this piece of information only if i didn't receive it from the other
@@ -235,7 +241,8 @@ public class MatchC {
 	 * method. It works the same way, but it is only used when the request is coming
 	 * from the other player and it simulates the draw of the adversary. It is also
 	 * used when the two players are synchronizing the informations at the start of
-	 * the match.</br></br>
+	 * the match.</br>
+	 * </br>
 	 * 
 	 * It has to be implemented in a different method because it has to adjourn the
 	 * player value of the EnumCard placed.
@@ -246,9 +253,11 @@ public class MatchC {
 	 * @param player : int - player that drew that card
 	 */
 	public void placeCard(int x, EnumCards card, int player) {
-		turn = true;
+		passTurn(true);
 		model.placeCard(x, card, player);
+		isGameOver();
 		reload();
+
 	}
 
 	/**
@@ -298,13 +307,14 @@ public class MatchC {
 			System.out.println(UtilityClass.WRONG_TURN);
 		}
 	}
-	
+
 	/**
 	 * If the player has already selected is not able to pick up another one.</br>
 	 * 
 	 * This method checks if this condition is respected.
 	 * 
-	 * @return isAbleToPickUp : boolean - is the player able to pick up a card at the moment
+	 * @return isAbleToPickUp : boolean - is the player able to pick up a card at
+	 *         the moment
 	 */
 	public boolean pickUpIsAllowed() {
 		return model.getSelectedCard() == null ? true : false;
@@ -331,65 +341,101 @@ public class MatchC {
 		} else {
 			sProtocol.send(message);
 		}
-		turn = false;
+		passTurn(false);
+	}
+
+	/**
+	 * This method make the state of the game advance a turn.
+	 * 
+	 * @param nextTurn : boolean - it represents which player will the next turn be
+	 */
+	protected void passTurn(boolean nextTurn) {
+		view.turnPassed(turn = nextTurn);
 	}
 
 	/**
 	 * Checks if the game is ended and in that case make the program progress to the
-	 * next portion of the game: the winner announcement and the play again request.</br>
+	 * next portion of the game: the winner announcement and the play again
+	 * request.</br>
 	 * 
 	 * As it checks if the game is over it also determines the winner.
 	 */
-	public static void isGameOver() {
+	public void isGameOver() {
 		/*
 		 * Checks if there are any available moves to the player with the cards that are
 		 * given to him at the moment
 		 */
-		boolean availableMoves = false;
+		boolean availableMoves = availableMoves();
+
+		/*
+		 * Check if all the gems are been claimed
+		 */
+		boolean areGemsAvailable = areGemsAvailable();
+
+		if (!availableMoves || !areGemsAvailable) {
+			endGame();
+		}
+	}
+
+	/**
+	 * Checks if there are still available moves to the player with the cards at his
+	 * disposal.
+	 * 
+	 * @return availableMoves : boolean - there are available moves
+	 */
+	private boolean availableMoves() {
 		for (Map.Entry<Integer, EnumCards> card : model.getP1Cards().entrySet()) {
 			for (int i = 1; i < 4; i++) {
 				for (int j = 1; j < 4; j++) {
 					for (EnumTriangle direction : EnumTriangle.values()) {
 						if (!model.getBoardCards().containsKey(model.getKey(i, j))) {
 							if (!isThereAGem(i, j)) {
-								availableMoves = true;
+								return true;
 							}
 						} else if (pushIsAllowed(i, j, direction, card.getValue())) {
-							availableMoves = true;
+							return true;
 						}
 					}
 				}
 			}
 		}
+		return false;
+	}
 
-		/*
-		 * Check if all the gems are been claimed
-		 */
-		boolean areGemsTaken = true;
+	/**
+	 * Checks if there are any gems that have not been taken yet.
+	 * 
+	 * @return areGemsAvailable : boolean - there are gems not taken yet
+	 */
+	private boolean areGemsAvailable() {
 		for (Integer[] gem : model.getGems()) {
 			if (model.getBoardCards().get(model.getKey(gem[0], gem[1])) == null) {
-				areGemsTaken = false;
-				break;
+				return true;
 			}
 		}
+		return false;
+	}
 
-		if (!availableMoves || areGemsTaken) {
-			String result = "";
-			switch (declareWinner()) {
-			case 1:
-				result = UtilityClass.WIN_MESSAGE;
-				break;
-			case 0:
-				result = UtilityClass.DRAW_MESSAGE;
-				break;
-			case 2:
-				result = UtilityClass.LOSS_MESSAGE;
-				break;
-			}
-			MatchV.frame.setVisible(false);
-			EntryPoint.endScreen.frame.setVisible(true);
-			EndV.setResult(result);
+	/**
+	 * The game is over. This method declares the winner and move to the next
+	 * window.
+	 */
+	private void endGame() {
+		String result = "";
+		switch (declareWinner()) {
+		case 1:
+			result = UtilityClass.WIN_MESSAGE;
+			break;
+		case 0:
+			result = UtilityClass.DRAW_MESSAGE;
+			break;
+		case 2:
+			result = UtilityClass.LOSS_MESSAGE;
+			break;
 		}
+		passTurn(false);
+		EntryPoint.endScreen.frame.setVisible(true);
+		EndV.setResult(result);
 	}
 
 	/**
@@ -440,11 +486,19 @@ public class MatchC {
 	 * Retrieve the informations from the model needed to initialize the match on a
 	 * different client
 	 * 
-	 * @return initialization informations : ArrayList<String> - All the infomations
+	 * @return initialization informations : ArrayList<String> - All the informations
 	 *         needed at the creation of the other player's match
 	 */
 	public ArrayList<String> getInitializationInfos() {
-		return model.getInitializationInfos();
+		ArrayList<String> data = new ArrayList<>();
+		for (int i = 0; i < 3; i++) {
+			data.add(String.format(UtilityClass.DRAW_COMMAND, i, model.getP1Cards().get(i).toString(), 2));
+			data.add(String.format(UtilityClass.DRAW_COMMAND, i, model.getP2Cards().get(i).toString(), 1));
+		}
+		for (int i = 0; i < 3; i++) {
+			data.add(String.format(UtilityClass.GEM_COMMAND, i, model.getGems().get(i)[0], model.getGems().get(i)[1]));
+		}
+		return data;
 	}
 
 	/**

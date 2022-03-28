@@ -21,7 +21,7 @@ public class SelectedCardV extends CellV {
 
 	// CONSTRUCTOR
 	public SelectedCardV(BufferedImage image) {
-		super(Color.PINK, Color.MAGENTA, false, image);
+		super(Color.GREEN, Color.MAGENTA, false, image);
 		this.isSelected = false;
 	}
 
@@ -46,7 +46,7 @@ public class SelectedCardV extends CellV {
 			Graphics2D g2 = (Graphics2D) g;
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			g2.setStroke(new BasicStroke(4f));
-			g2.setColor(Color.GREEN);
+			g2.setColor(this.getMainColor());
 			g2.fillOval(0, 0, this.getHeight(), this.getWidth());
 		}
 

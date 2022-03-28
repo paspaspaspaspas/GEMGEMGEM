@@ -2,7 +2,7 @@ package gemgemgem;
 
 import gemgemgem.view.EndV;
 import gemgemgem.view.MenuV;
-import gemgemgem.view.ServerV;
+import gemgemgem.view.NetV;
 
 /**
  * This is the entry point for this project. You should run this class in order
@@ -29,7 +29,7 @@ public class EntryPoint {
 	 */
 	public static void main(String[] args) {
 		MenuV.main(args);
-		new ServerV();
+		new NetV();
 		endScreen = new EndV();
 	}
 

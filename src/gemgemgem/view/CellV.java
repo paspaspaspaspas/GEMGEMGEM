@@ -170,8 +170,8 @@ public class CellV extends JComponent implements MouseListener, MouseMotionListe
 					(int) (MatchV.frame.getContentPane().getMousePosition().getY() - l / 30), l / 15, l / 15);
 			MatchV.selectedCard.setSidesColor(Color.ORANGE);
 		} else {
-			MatchV.selectedCard.setBounds((int) (MatchV.frame.getContentPane().getMousePosition().getX() - l / 100),
-					(int) (MatchV.frame.getContentPane().getMousePosition().getY() - l / 100), l / 50, l / 50);
+			MatchV.selectedCard.setBounds((int) (MatchV.frame.getContentPane().getMousePosition().getX() - l / 80),
+					(int) (MatchV.frame.getContentPane().getMousePosition().getY() - l / 80), l / 40, l / 40);
 		}
 		MatchV.selectedCard.repaint();
 	}

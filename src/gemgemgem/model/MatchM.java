@@ -318,24 +318,6 @@ public class MatchM {
 	}
 
 	/**
-	 * Generates a description of all the informations needed to synchronize an
-	 * other player's match with this one.
-	 * 
-	 * @return description : ArrayList<String> - all the informations needed
-	 */
-	public ArrayList<String> getInitializationInfos() {
-		ArrayList<String> data = new ArrayList<>();
-		for (int i = 0; i < 3; i++) {
-			data.add(String.format(UtilityClass.DRAW_COMMAND, i, p1Cards.get(i).toString(), 2));
-			data.add(String.format(UtilityClass.DRAW_COMMAND, i, p2Cards.get(i).toString(), 1));
-		}
-		for (int i = 0; i < 3; i++) {
-			data.add(String.format(UtilityClass.GEM_COMMAND, i, gems.get(i)[0], gems.get(i)[1]));
-		}
-		return data;
-	}
-
-	/**
 	 * Given some coordinates, saves those as the position of a gem
 	 * 
 	 * @param nGem : int - the gem whose position are the coordinates referring to

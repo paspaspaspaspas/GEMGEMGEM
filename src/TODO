@@ -1,18 +1,14 @@
 PROBLEMI
 
--> Quando clicchi su una carta e rimani perfettamente fermo la carta selezionata/il puntatore hanno dimensioni a strane.
--> Se la finestra assume dimensioni particolarmente sproporzionate la selected card diventa più grande delle carte stesse.
--> Quando ti occupi del movimento delle carte c'è un po' di codice ripetuto per gestire le 4 direzioni.
-
+-> LA POSSIBILITà DI PAREGGIO NECESSITà DI ALTRO TESTING PERCHè MI è PARSO DESSE SCONFITTA
+	QUANDO ERA PAREGGIO.
 
 IDEE
 
 -> LA PRIMA MOSSA PUò ESSERE FATTA DA ENTRAMBI I GIOCATORI: BUG O FEATURE?
--> CREA UN QUALCOSA CHE SEGNI DI CHI è IL TURNO
 -> Impedire ad un secondo client di collegarsi al server?
 
 TODO
 
--> LA POSSIBILITà DI PAREGGIO NECESSITà DI ALTRO TESTING PERCHè MI è PARSO DESSE SCONFITTA
-	QUANDO ERA PAREGGIO.
 -> I listener della view dovrebbero essere nel controller e non nella view.
+-> Inserire 2 ulteriori finestre per la creazione del server e della lobby
