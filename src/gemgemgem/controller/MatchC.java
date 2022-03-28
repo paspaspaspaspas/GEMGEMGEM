@@ -1,5 +1,8 @@
 package gemgemgem.controller;
 
+import java.awt.Point;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +15,8 @@ import gemgemgem.UtilityClass;
 import gemgemgem.model.MatchM;
 import gemgemgem.net.ClientProtocol;
 import gemgemgem.net.ServerProtocol;
+import gemgemgem.view.BenchCellV;
+import gemgemgem.view.BoardCellV;
 import gemgemgem.view.EndV;
 import gemgemgem.view.MatchV;
 
@@ -36,7 +41,7 @@ import gemgemgem.view.MatchV;
  * @author pas
  *
  */
-public class MatchC {
+public class MatchC implements MouseListener {
 
 	// ATTRIBUTES
 	private static MatchM model;
@@ -486,8 +491,8 @@ public class MatchC {
 	 * Retrieve the informations from the model needed to initialize the match on a
 	 * different client
 	 * 
-	 * @return initialization informations : ArrayList<String> - All the informations
-	 *         needed at the creation of the other player's match
+	 * @return initialization informations : ArrayList<String> - All the
+	 *         informations needed at the creation of the other player's match
 	 */
 	public ArrayList<String> getInitializationInfos() {
 		ArrayList<String> data = new ArrayList<>();
@@ -512,6 +517,99 @@ public class MatchC {
 	public void setGem(int nGem, int x, int y) {
 		model.setGem(nGem, x, y);
 		reload();
+	}
+
+	/**
+	 * It manages all the action that are passed to the controller's listener by the
+	 * view.
+	 * 
+	 * It can receive 2 types of event:</br>
+	 * -A board cell has been clicked</br>
+	 * -A bench cell has been clicked</br>
+	 * </br>
+	 * 
+	 * It responds accordingly based on this discrimination and other
+	 * characteristics of the single clicked cell.
+	 * 
+	 */
+	public void mouseClicked(MouseEvent e) {
+		if (e.getSource() instanceof BoardCellV) {
+			BoardCellV cellClicked = (BoardCellV) e.getComponent();
+			Point mousePosition = e.getPoint();
+			boardCardClicked(cellClicked, mousePosition);
+		} else {
+			BenchCellV cellClicked = (BenchCellV) e.getComponent();
+			benchCardClicked(cellClicked);
+		}
+	}
+
+	/**
+	 * If the board cell is already occupied tries to execute the move sliding the
+	 * cards in the direction deduced by the point clicked.
+	 * On the other hand, if the board cell it's empty, tries to place the selected card in that position.
+	 * 
+	 * @param cellClicked : BoardCellV - clicked cell
+	 * @param mousePosition : Point - point on the card clicked
+	 */
+	private void boardCardClicked(BoardCellV cellClicked, Point mousePosition) {
+		for (int i = 1; i < UtilityClass.CELL_PER_SIDE - 1; i++) {
+			for (int j = 1; j < UtilityClass.CELL_PER_SIDE - 1; j++) {
+				if (cellClicked == MatchV.getBoardCells()[i][j]) {
+					if (MatchV.selectedCard.getImage() != null && cellClicked.getImage() != null) {
+						EnumTriangle direction = cellClicked.whichTriangle(mousePosition);
+						executeMove(i, j, direction, null);
+					} else if (MatchV.selectedCard.getImage() != null) {
+						placeCard(i, j, null);
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * If the cell clicked contains a card, this method tries to pick up the aforementioned card.
+	 * Otherwise tries to place down the card that the player previously selected.
+	 * 
+	 * @param cellClicked : BenchCellV - cell that has been clicked
+	 */
+	private void benchCardClicked(BenchCellV cellClicked) {
+		for (int i = 1; i < 4; i++) {
+			if (MatchV.getPlayerCells()[i] == cellClicked) {
+				if (MatchV.getPlayerCells()[i].getImage() == null && MatchV.selectedCard != null) {
+					placeCard(i, -1, null);
+					MatchV.selectedCard.deselected();
+				} else {
+					pickUpCard(i);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Unused
+	 */
+	public void mousePressed(MouseEvent e) {
+	}
+
+	/**
+	 * Unused
+	 */
+	public void mouseReleased(MouseEvent e) {
+
+	}
+
+	/**
+	 * Unused
+	 */
+	public void mouseEntered(MouseEvent e) {
+
+	}
+
+	/**
+	 * Unused
+	 */
+	public void mouseExited(MouseEvent e) {
+
 	}
 
 }

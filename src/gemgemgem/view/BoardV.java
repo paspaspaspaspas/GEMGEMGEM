@@ -3,15 +3,11 @@ package gemgemgem.view;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.RenderingHints;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JComponent;
 
-import gemgemgem.EnumTriangle;
 import gemgemgem.UtilityClass;
 
 /**
@@ -28,7 +24,7 @@ import gemgemgem.UtilityClass;
  * @author pas
  *
  */
-public class BoardV extends JComponent implements MouseListener {
+public class BoardV extends JComponent {
 
 	// ATTRIBUTES
 	private int cellsPerSide = UtilityClass.CELL_PER_SIDE;
@@ -42,17 +38,12 @@ public class BoardV extends JComponent implements MouseListener {
 
 		createCells();
 		setGems();
-
-		for (CellV[] cardRow : cells) {
-			for (CellV card : cardRow) {
-				if (card instanceof BoardCellV) {
-					card.addMouseListener(this);
-				}
-			}
-		}
 	}
 
 	// SETTERS AND GETTERS
+	public CellV[][] getCells() {
+		return cells;
+	}
 
 	// METHODS
 	/**
@@ -76,6 +67,22 @@ public class BoardV extends JComponent implements MouseListener {
 					cells[i][j] = new BoardCellV(
 							MatchV.info.getImagesBoard()[i][j] == null ? null : MatchV.info.getImagesBoard()[i][j]);
 				this.add(cells[i][j]);
+			}
+		}
+		
+		/*
+		 * With this for cycle i link the Listeners implemented in the controller to the
+		 * cells on which the player will perform the actions.
+		 * 
+		 * This procedure is done here since this class contains all the wanted cells
+		 * and knows if they are instance of the BoardCellV class (Not all the cells
+		 * implement a MouseListener).
+		 */
+		for (CellV[] cardRow : cells) {
+			for (CellV card : cardRow) {
+				if (card instanceof BoardCellV) {
+					card.addMouseListener(MatchV.controller);
+				}
 			}
 		}
 	}
@@ -141,51 +148,6 @@ public class BoardV extends JComponent implements MouseListener {
 		}
 		setGems();
 		this.repaint();
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		BoardCellV cardClicked = (BoardCellV) e.getComponent();
-		Point mousePosition = e.getPoint();
-		for (int i = 1; i < cellsPerSide - 1; i++) {
-			for (int j = 1; j < cellsPerSide - 1; j++) {
-				if (cardClicked == cells[i][j]) {
-					if (MatchV.selectedCard.getImage() != null && cardClicked.getImage() != null) {
-						EnumTriangle direction = cardClicked.whichTriangle(mousePosition);
-						MatchV.controller.executeMove(i, j, direction, null);
-					} else if (MatchV.selectedCard.getImage() != null) {
-						MatchV.controller.placeCard(i, j, null);
-					}
-				}
-			}
-		}
-	}
-
-	/**
-	 * Unused
-	 */
-	public void mousePressed(MouseEvent e) {
-	}
-
-	/**
-	 * Unused
-	 */
-	public void mouseReleased(MouseEvent e) {
-
-	}
-
-	/**
-	 * Unused
-	 */
-	public void mouseEntered(MouseEvent e) {
-
-	}
-
-	/**
-	 * Unused
-	 */
-	public void mouseExited(MouseEvent e) {
-
 	}
 
 }

@@ -4,8 +4,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JComponent;
@@ -23,7 +21,7 @@ import gemgemgem.UtilityClass;
  * @author pas
  *
  */
-public class PlayerV extends JComponent implements MouseListener {
+public class PlayerV extends JComponent {
 
 	// ATTRIBUTES
 	private int cellsPerPlayerSide = UtilityClass.CELL_PER_SIDE;
@@ -37,10 +35,14 @@ public class PlayerV extends JComponent implements MouseListener {
 		setPreferredSize(new Dimension(125, 500));
 		cells = new CellV[cellsPerPlayerSide];
 		createCells(player);
-
+	}
+	
+	//GETTERS AND SETTERS
+	public CellV[] getCells() {
+		return cells;
 	}
 
-	// METODI
+	//METHODS
 	/**
 	 * This method creates the cells of a player side based on the informations
 	 * passed by the controller.
@@ -62,13 +64,21 @@ public class PlayerV extends JComponent implements MouseListener {
 						player == 1 ? MatchV.info.getImagesP1()[i - 1] : MatchV.info.getImagesP2()[i - 1], player);
 			this.add(cells[i]);
 		}
+		
 		/*
-		 * A player should not be able to click the cells of the adversary
+		 * With this for cycle i link the Listeners implemented in the controller to the
+		 * cells on which the player will perform the actions.
+		 * 
+		 * This procedure is done here since this class contains all the wanted cells
+		 * and knows if they are instance of the BenchCellV class (Not all the cells
+		 * implement a MouseListener).
+		 * 
+		 * Furthermore please notice that a player should not be able to click on the enemy cards.
 		 */
 		if (player == 1) {
 			for (CellV card : cells) {
 				if (card instanceof BenchCellV) {
-					card.addMouseListener(this);
+					card.addMouseListener(MatchV.controller);
 				}
 			}
 		}
@@ -119,51 +129,4 @@ public class PlayerV extends JComponent implements MouseListener {
 		}
 		this.repaint();
 	}
-
-	@Override
-	/**
-	 * This method let the player pick up or place down the selected card.
-	 */
-	public void mouseClicked(MouseEvent e) {
-		BenchCellV cardClicked = (BenchCellV) e.getComponent();
-		for (int i = 1; i < 4; i++) {
-			if (cells[i] == cardClicked) {
-				if (cells[i].getImage() == null && MatchV.selectedCard != null) {
-					MatchV.controller.placeCard(i, -1, null);
-					MatchV.selectedCard.deselected();
-				} else {
-					MatchV.controller.pickUpCard(i);
-				}
-			}
-		}
-	}
-
-	/**
-	 * Unused
-	 */
-	public void mousePressed(MouseEvent e) {
-
-	}
-
-	/**
-	 * Unused
-	 */
-	public void mouseReleased(MouseEvent e) {
-
-	}
-
-	/**
-	 * Unused
-	 */
-	public void mouseEntered(MouseEvent e) {
-
-	}
-
-	/**
-	 * Unused
-	 */
-	public void mouseExited(MouseEvent e) {
-
-	}
-
 }

@@ -38,7 +38,7 @@ public class MatchV implements MouseMotionListener {
 	protected static ModelInfo info;
 	protected static MatchC controller;
 
-	//CONSTRUCTOR
+	// CONSTRUCTOR
 	/**
 	 * Create the application.
 	 */
@@ -48,7 +48,7 @@ public class MatchV implements MouseMotionListener {
 		initialize();
 	}
 
-	//METHODS
+	// METHODS
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -88,6 +88,7 @@ public class MatchV implements MouseMotionListener {
 
 		frame.getContentPane().addMouseMotionListener(this);
 	}
+
 	/**
 	 * Unused
 	 */
@@ -114,6 +115,26 @@ public class MatchV implements MouseMotionListener {
 	}
 
 	/**
+	 * It returns the view of the cells that form the board. In this case the board
+	 * includes the graveyard too since we are referring to the view.
+	 * 
+	 * @return boardCells : CellsV[][] - the view of the cells
+	 */
+	public static CellV[][] getBoardCells() {
+		return board.getCells();
+	}
+
+	/**
+	 * It returns the view of the cells that form the player's bench. The icon and
+	 * the deck back are also included since we are referring to the bench's view.
+	 * 
+	 * @return playerCells : CellsV[] - the view of the cells
+	 */
+	public static CellV[] getPlayerCells() {
+		return player1.getCells();
+	}
+
+	/**
 	 * It repaints the view
 	 */
 	public void repaint() {
@@ -135,14 +156,16 @@ public class MatchV implements MouseMotionListener {
 
 	/**
 	 * When the turn change this method refresh the pointer:</br>
-	 * 	- GREEN = it's the player's turn</br>
-	 * 	- RED = it's the adversary's turn
+	 * - GREEN = it's the player's turn</br>
+	 * - RED = it's the adversary's turn
 	 * 
 	 * @param turn : boolean - it represents either it's the player's turn or not
 	 */
 	public void turnPassed(boolean turn) {
-		if(turn) selectedCard.setMainColor(Color.GREEN);
-		else selectedCard.setMainColor(Color.RED);
+		if (turn)
+			selectedCard.setMainColor(Color.GREEN);
+		else
+			selectedCard.setMainColor(Color.RED);
 		selectedCard.repaint();
 	}
 
