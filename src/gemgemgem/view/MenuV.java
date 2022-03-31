@@ -83,7 +83,7 @@ public class MenuV {
 
 		JLabel title = new JLabel("GEMGEMGEM");
 		title.setForeground(Color.BLACK);
-		title.setFont(new Font("Curlz MT", Font.BOLD | Font.ITALIC, 66));
+		title.setFont(new Font("Brush Script MT", Font.BOLD | Font.ITALIC, 62));
 		title.setHorizontalAlignment(SwingConstants.CENTER);
 		panel.add(title, BorderLayout.CENTER);
 
@@ -95,7 +95,7 @@ public class MenuV {
 			}
 		});
 		playButton.setBackground(Color.GREEN);
-		playButton.setFont(new Font("Curlz MT", Font.BOLD, 29));
+		playButton.setFont(new Font("Brush Script MT", Font.BOLD, 29));
 		panel.add(playButton, BorderLayout.SOUTH);
 
 		JButton tutorialButton = new JButton("Help");

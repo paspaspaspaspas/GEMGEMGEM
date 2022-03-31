@@ -121,6 +121,7 @@ public class MatchC implements MouseListener {
 	 */
 	public void executeMove(int x, int y, EnumTriangle direction, EnumCards card) {
 		passTurn(true);
+
 		/*
 		 * I need the user's selected card only if the player is the one making the
 		 * move. If the move has already been checked from the other player the card I
@@ -137,7 +138,7 @@ public class MatchC implements MouseListener {
 						model.getSelectedCard().toString()));
 			model.moveCards(x, y, direction, card);
 			reload();
-			isGameOver();
+			isGameOver(turn);
 		} else {
 			System.out.println(UtilityClass.MOVE_NOT_ALLOWED);
 		}
@@ -169,7 +170,6 @@ public class MatchC implements MouseListener {
 	public static boolean pushIsAllowed(int x, int y, EnumTriangle direction, EnumCards card) {
 		if (card == null)
 			return false;
-
 		boolean isAllowed = true;
 		HashMap<List<Integer>, EnumCards> boardCards = model.getBoardCards();
 		switch (direction) {
@@ -234,11 +234,10 @@ public class MatchC implements MouseListener {
 				send(String.format(UtilityClass.PLACE_COMMAND, x, y, model.getSelectedCard().toString()));
 			model.placeCard(x, y, card);
 			reload();
-			isGameOver();
+			isGameOver(turn);
 		} else {
 			System.out.println(UtilityClass.WRONG_PLACEMENT);
 		}
-
 	}
 
 	/**
@@ -260,7 +259,6 @@ public class MatchC implements MouseListener {
 	public void placeCard(int x, EnumCards card, int player) {
 		passTurn(true);
 		model.placeCard(x, card, player);
-		isGameOver();
 		reload();
 
 	}
@@ -365,12 +363,12 @@ public class MatchC implements MouseListener {
 	 * 
 	 * As it checks if the game is over it also determines the winner.
 	 */
-	public void isGameOver() {
+	public void isGameOver(boolean turn) {
 		/*
 		 * Checks if there are any available moves to the player with the cards that are
 		 * given to him at the moment
 		 */
-		boolean availableMoves = availableMoves();
+		boolean availableMoves = availableMoves(turn);
 
 		/*
 		 * Check if all the gems are been claimed
@@ -388,8 +386,10 @@ public class MatchC implements MouseListener {
 	 * 
 	 * @return availableMoves : boolean - there are available moves
 	 */
-	private boolean availableMoves() {
-		for (Map.Entry<Integer, EnumCards> card : model.getP1Cards().entrySet()) {
+	private boolean availableMoves(boolean turn) {
+		
+		for (Map.Entry<Integer, EnumCards> card : (turn ? model.getP1Cards().entrySet()
+				: model.getP2Cards().entrySet())) {
 			for (int i = 1; i < 4; i++) {
 				for (int j = 1; j < 4; j++) {
 					for (EnumTriangle direction : EnumTriangle.values()) {
@@ -439,7 +439,7 @@ public class MatchC implements MouseListener {
 			break;
 		}
 		passTurn(false);
-		EntryPoint.endScreen.frame.setVisible(true);
+		EndV.frame.setVisible(true);
 		EndV.setResult(result);
 	}
 
@@ -495,6 +495,11 @@ public class MatchC implements MouseListener {
 	 *         informations needed at the creation of the other player's match
 	 */
 	public ArrayList<String> getInitializationInfos() {
+		/*
+		 * The client player gets the first move.
+		 * This happens because he gets synchronized the server player pass the turn
+		 */
+		passTurn(false);
 		ArrayList<String> data = new ArrayList<>();
 		for (int i = 0; i < 3; i++) {
 			data.add(String.format(UtilityClass.DRAW_COMMAND, i, model.getP1Cards().get(i).toString(), 2));
@@ -545,10 +550,10 @@ public class MatchC implements MouseListener {
 
 	/**
 	 * If the board cell is already occupied tries to execute the move sliding the
-	 * cards in the direction deduced by the point clicked.
-	 * On the other hand, if the board cell it's empty, tries to place the selected card in that position.
+	 * cards in the direction deduced by the point clicked. On the other hand, if
+	 * the board cell it's empty, tries to place the selected card in that position.
 	 * 
-	 * @param cellClicked : BoardCellV - clicked cell
+	 * @param cellClicked   : BoardCellV - clicked cell
 	 * @param mousePosition : Point - point on the card clicked
 	 */
 	private void boardCardClicked(BoardCellV cellClicked, Point mousePosition) {
@@ -567,8 +572,9 @@ public class MatchC implements MouseListener {
 	}
 
 	/**
-	 * If the cell clicked contains a card, this method tries to pick up the aforementioned card.
-	 * Otherwise tries to place down the card that the player previously selected.
+	 * If the cell clicked contains a card, this method tries to pick up the
+	 * aforementioned card. Otherwise tries to place down the card that the player
+	 * previously selected.
 	 * 
 	 * @param cellClicked : BenchCellV - cell that has been clicked
 	 */

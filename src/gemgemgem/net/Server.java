@@ -31,6 +31,7 @@ public class Server implements Runnable {
 
 	private ServerSocket socketS;
 	private boolean isRunning = true;
+	private boolean alreadyMatched = false;
 	private PrintWriter out;
 	private BufferedReader in;
 
@@ -69,20 +70,26 @@ public class Server implements Runnable {
 	 * the client.
 	 */
 	public void run() {
-		System.out.println("[System] : THE SERVER IS STARTING");
-		try (ServerSocket s = new ServerSocket(port); Socket clientSocket = s.accept();) {
+		System.out.println(UtilityClass.SERVER_STARTING);
+		try (ServerSocket s = new ServerSocket(port); ) {
+			/**
+			 * Thank to this condition the server does not accept more than one client
+			 */
+			if(!alreadyMatched) {
+				Socket clientSocket = s.accept();
+				alreadyMatched = true;
+				this.out = new PrintWriter(clientSocket.getOutputStream(), true);
+				this.in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+				socketS = s;
 
-			this.out = new PrintWriter(clientSocket.getOutputStream(), true);
-			this.in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-			socketS = s;
+				String inputLine;
+				ServerProtocol p = new ServerProtocol(match, this);
 
-			String inputLine;
-			ServerProtocol p = new ServerProtocol(match, this);
-
-			while (isRunning && (inputLine = in.readLine()) != null) {
-				p.processRequest(inputLine);
+				while (isRunning && (inputLine = in.readLine()) != null) {
+					p.processRequest(inputLine);
+				}
 			}
-
+			
 		} catch (IOException e) {
 			System.err.println(UtilityClass.COMMUNICATION_ERROR);
 		} finally {

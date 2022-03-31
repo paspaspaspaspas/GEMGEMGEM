@@ -8,10 +8,15 @@ import java.awt.BorderLayout;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
+
+import gemgemgem.EnumImagesUtility;
+
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
 
 /**
  * These class represents the view of the final screen that appears after a game
@@ -24,7 +29,7 @@ import java.awt.Color;
 public class EndV {
 
 	//ATTRIBUTES
-	public JFrame frame;
+	public static JFrame frame;
 	private static JLabel resultLbl;
 
 	/**
@@ -35,7 +40,7 @@ public class EndV {
 			public void run() {
 				try {
 					EndV window = new EndV();
-					window.frame.setVisible(false);
+					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -55,19 +60,30 @@ public class EndV {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(400, 150, 720, 500);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setResizable(false);
 
-		JPanel panel = new JPanel();
+		JPanel panel = new JPanel(){
+			@Override
+			protected void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				g.drawImage(EnumImagesUtility.BACKGROUND.getImage(), 0, 0, null);
+			}
+		};;
 		frame.getContentPane().add(panel, BorderLayout.CENTER);
-		panel.setLayout(new BorderLayout(0, 0));
+		panel.setLayout(null);
 
 		resultLbl = new JLabel("");
+		resultLbl.setBounds(0, 162, 716, 124);
+		resultLbl.setFont(new Font("Century Schoolbook", Font.PLAIN, 30));
 		resultLbl.setBackground(new Color(255, 255, 0));
 		resultLbl.setHorizontalAlignment(SwingConstants.CENTER);
-		panel.add(resultLbl, BorderLayout.CENTER);
+		panel.add(resultLbl);
 
 		JButton rematchBtn = new JButton("PLAY AGAIN");
+		rematchBtn.setBounds(0, 413, 716, 59);
+		rematchBtn.setFont(new Font("Brush Script MT", Font.PLAIN, 40));
 		rematchBtn.setBackground(new Color(173, 255, 47));
 		rematchBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -83,7 +99,7 @@ public class EndV {
 				}
 			}
 		});
-		panel.add(rematchBtn, BorderLayout.SOUTH);
+		panel.add(rematchBtn);
 	}
 
 	/**

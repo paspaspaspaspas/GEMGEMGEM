@@ -12,9 +12,6 @@ import gemgemgem.view.NetV;
  *
  */
 public class EntryPoint {
-
-	public static EndV endScreen;
-
 	/**
 	 * This method create the 3 control screen of the game that will help the player
 	 * navigating through the game. </br>
@@ -30,7 +27,7 @@ public class EntryPoint {
 	public static void main(String[] args) {
 		MenuV.main(args);
 		new NetV();
-		endScreen = new EndV();
+		new EndV();
 	}
 
 }

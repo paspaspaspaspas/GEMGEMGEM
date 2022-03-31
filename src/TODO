@@ -2,12 +2,3 @@ PROBLEMI
 
 -> LA POSSIBILITà DI PAREGGIO NECESSITà DI ALTRO TESTING PERCHè MI è PARSO DESSE SCONFITTA
 	QUANDO ERA PAREGGIO.
-
-IDEE
-
--> LA PRIMA MOSSA PUò ESSERE FATTA DA ENTRAMBI I GIOCATORI: BUG O FEATURE?
--> Impedire ad un secondo client di collegarsi al server?
-
-TODO
-
--> Inserire 2 ulteriori finestre per la creazione del server e della lobby

@@ -81,7 +81,7 @@ public class NetV {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(550, 250, 450, 300);
+		frame.setBounds(400, 150, 720, 500);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
 		
@@ -99,7 +99,7 @@ public class NetV {
 		JButton btnClient = new JButton("JOIN a lobby");
 		btnClient.setForeground(new Color(248, 248, 255));
 		btnClient.setBackground(new Color(139, 69, 19));
-		btnClient.setFont(new Font("Curlz MT", Font.PLAIN, 20));
+		btnClient.setFont(new Font("Century Schoolbook", Font.PLAIN, 20));
 		btnClient.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.setVisible(false);
@@ -112,10 +112,10 @@ public class NetV {
 		});
 		panel.add(btnClient, BorderLayout.WEST);
 
-		JButton btnServer = new JButton("CREATE a lobby");
+		JButton btnServer = new JButton("<html>CREATE a lobby<br />\r\n*ip not needed</html>");
 		btnServer.setForeground(new Color(248, 248, 255));
 		btnServer.setBackground(new Color(139, 69, 19));
-		btnServer.setFont(new Font("Curlz MT", Font.PLAIN, 20));
+		btnServer.setFont(new Font("Century Schoolbook", Font.PLAIN, 20));
 		btnServer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.setVisible(false);
@@ -148,26 +148,39 @@ public class NetV {
 		panel.add(tutorialButton, BorderLayout.NORTH);
 		
 		JPanel panel_1 = new JPanel();
+		panel_1.setBackground(new Color(128, 0, 0));
 		panel.add(panel_1, BorderLayout.SOUTH);
 		panel_1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		JLabel lblNewLabel = new JLabel("Joining a server? IP:");
+		JLabel lblNewLabel = new JLabel("Set IP address:");
+		lblNewLabel.setForeground(new Color(255, 255, 255));
+		lblNewLabel.setFont(new Font("Century Schoolbook", Font.PLAIN, 15));
 		panel_1.add(lblNewLabel);
 		
 		txtIpAdress = new JTextField();
+		txtIpAdress.setFont(new Font("Century Schoolbook", Font.ITALIC, 15));
 		txtIpAdress.setText("default");
 		txtIpAdress.setHorizontalAlignment(SwingConstants.CENTER);
 		panel_1.add(txtIpAdress);
 		txtIpAdress.setColumns(10);
 		
 		JLabel portLbl = new JLabel("Set port: ");
+		portLbl.setForeground(new Color(255, 255, 255));
+		portLbl.setFont(new Font("Century Schoolbook", Font.PLAIN, 15));
 		panel_1.add(portLbl);
 		
 		txtPort = new JTextField();
+		txtPort.setFont(new Font("Century Schoolbook", Font.ITALIC, 15));
 		txtPort.setText("default");
 		txtPort.setHorizontalAlignment(SwingConstants.CENTER);
 		panel_1.add(txtPort);
 		txtPort.setColumns(10);
+		
+		JLabel lblNewLabel_1 = new JLabel("GEMGEMGEM");
+		lblNewLabel_1.setForeground(Color.WHITE);
+		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_1.setFont(new Font("Brush Script MT", Font.BOLD | Font.ITALIC, 54));
+		panel.add(lblNewLabel_1, BorderLayout.CENTER);
 	}
 	
 	
