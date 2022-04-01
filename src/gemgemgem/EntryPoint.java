@@ -1,5 +1,15 @@
 package gemgemgem;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+
 import gemgemgem.view.EndV;
 import gemgemgem.view.MenuV;
 import gemgemgem.view.NetV;
@@ -22,12 +32,21 @@ public class EntryPoint {
 	 * They are also linked together in order to be able to switch from one to the
 	 * other depending on the state of the game.
 	 * 
+	 * This class is also responsible to create and start a thread that will run the
+	 * music in the background.
+	 * 
 	 * @param args
 	 */
 	public static void main(String[] args) {
+
+		//View initialization
 		MenuV.main(args);
-		new NetV();
-		new EndV();
+
+		//Loading the music
+		Music backgroundMusic = new Music();
+		Thread musicThread = new Thread(backgroundMusic);
+		musicThread.start();
+
 	}
 
 }

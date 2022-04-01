@@ -2,3 +2,9 @@ PROBLEMI
 
 -> LA POSSIBILITà DI PAREGGIO NECESSITà DI ALTRO TESTING PERCHè MI è PARSO DESSE SCONFITTA
 	QUANDO ERA PAREGGIO.
+	
+TODO
+
+-> Estrarre le icone in maniera cusuale? Non ti costa molto
+-> Sistema un po la musica(loop, thread indipendente, quando il programma termina)
+-> Se proprio vuoi fare lo schizzinoso il loop non è troppo clean

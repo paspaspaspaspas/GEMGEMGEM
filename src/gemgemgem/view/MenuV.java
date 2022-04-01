@@ -90,8 +90,8 @@ public class MenuV {
 		JButton playButton = new JButton("PLAY");
 		playButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				NetV.frame.setVisible(true);
-				frame.setVisible(false);
+				NetV.main(null);
+				frame.dispose();
 			}
 		});
 		playButton.setBackground(Color.GREEN);

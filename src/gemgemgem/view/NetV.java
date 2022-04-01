@@ -102,7 +102,8 @@ public class NetV {
 		btnClient.setFont(new Font("Century Schoolbook", Font.PLAIN, 20));
 		btnClient.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frame.setVisible(false);
+				frame.dispose();
+				new EndV();
 				String ip = parseIp(txtIpAdress.getText());
 				int port = parsePort(txtPort.getText());
 				Client c = new Client(ip, port);
@@ -118,7 +119,8 @@ public class NetV {
 		btnServer.setFont(new Font("Century Schoolbook", Font.PLAIN, 20));
 		btnServer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frame.setVisible(false);
+				frame.dispose();
+				new EndV();
 				int port = parsePort(txtPort.getText());
 				s = new Server(port);
 				Thread sThread = new Thread(s);
@@ -176,11 +178,11 @@ public class NetV {
 		panel_1.add(txtPort);
 		txtPort.setColumns(10);
 		
-		JLabel lblNewLabel_1 = new JLabel("GEMGEMGEM");
-		lblNewLabel_1.setForeground(Color.WHITE);
-		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_1.setFont(new Font("Brush Script MT", Font.BOLD | Font.ITALIC, 54));
-		panel.add(lblNewLabel_1, BorderLayout.CENTER);
+		JLabel lnlTitle = new JLabel("GEMGEMGEM");
+		lnlTitle.setForeground(Color.WHITE);
+		lnlTitle.setHorizontalAlignment(SwingConstants.CENTER);
+		lnlTitle.setFont(new Font("Brush Script MT", Font.BOLD | Font.ITALIC, 54));
+		panel.add(lnlTitle, BorderLayout.CENTER);
 	}
 	
 	

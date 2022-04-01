@@ -40,7 +40,7 @@ public class EndV {
 			public void run() {
 				try {
 					EndV window = new EndV();
-					window.frame.setVisible(true);
+					window.frame.setVisible(false);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -87,9 +87,9 @@ public class EndV {
 		rematchBtn.setBackground(new Color(173, 255, 47));
 		rematchBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frame.setVisible(false);
-				MatchV.frame.setVisible(false);
-				NetV.frame.setVisible(true);
+				frame.dispose();
+				MatchV.frame.dispose();
+				NetV.main(null);
 				if (NetV.getServer() != null) {
 					try {
 						NetV.getServer().getSocketServer().close();
