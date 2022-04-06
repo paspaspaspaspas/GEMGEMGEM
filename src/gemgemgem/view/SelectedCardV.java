@@ -21,7 +21,7 @@ public class SelectedCardV extends CellV {
 
 	// CONSTRUCTOR
 	public SelectedCardV(BufferedImage image) {
-		super(Color.GREEN, Color.MAGENTA, false, image);
+		super(Color.RED, Color.MAGENTA, false, image);
 		this.isSelected = false;
 	}
 

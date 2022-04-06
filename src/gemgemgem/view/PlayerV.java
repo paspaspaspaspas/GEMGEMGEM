@@ -56,7 +56,7 @@ public class PlayerV extends JComponent {
 		 */
 		for (int i = 0; i < cellsPerPlayerSide; i++) {
 			if (i == 0) {
-				cells[i] = new IconCellV(player);
+				cells[i] = new IconCellV();
 			} else if (i == cellsPerPlayerSide - 1)
 				cells[i] = new DeckCellV(player);
 			else

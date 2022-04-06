@@ -169,4 +169,12 @@ public class MatchV implements MouseMotionListener {
 		selectedCard.repaint();
 	}
 
+	/**
+	 * When the game is terminated, the pointer disappear to underline to the player
+	 * that he is not able to interact with the board anymore.
+	 */
+	public void removePointer() {
+		selectedCard.setVisible(false);
+	}
+
 }

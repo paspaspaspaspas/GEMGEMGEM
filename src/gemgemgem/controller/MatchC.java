@@ -17,6 +17,7 @@ import gemgemgem.net.ClientProtocol;
 import gemgemgem.net.ServerProtocol;
 import gemgemgem.view.BenchCellV;
 import gemgemgem.view.BoardCellV;
+import gemgemgem.view.CellV;
 import gemgemgem.view.EndV;
 import gemgemgem.view.MatchV;
 
@@ -260,6 +261,7 @@ public class MatchC implements MouseListener {
 		passTurn(true);
 		model.placeCard(x, card, player);
 		reload();
+		isGameOver(turn);
 
 	}
 
@@ -387,7 +389,7 @@ public class MatchC implements MouseListener {
 	 * @return availableMoves : boolean - there are available moves
 	 */
 	private boolean availableMoves(boolean turn) {
-		
+
 		for (Map.Entry<Integer, EnumCards> card : (turn ? model.getP1Cards().entrySet()
 				: model.getP2Cards().entrySet())) {
 			for (int i = 1; i < 4; i++) {
@@ -439,8 +441,30 @@ public class MatchC implements MouseListener {
 			break;
 		}
 		passTurn(false);
+		view.removePointer();
+		removeListeners();
 		EndV.frame.setVisible(true);
 		EndV.setResult(result);
+	}
+
+	/**
+	 * When the game is over, the window is left open for the player to see the last
+	 * move and see why the game ended.
+	 * 
+	 * The player should not be able to interact with the screen though since the
+	 * game is terminated. In order to achieve this result the mouseListener of the
+	 * view are removed.
+	 */
+	private void removeListeners() {
+		view.frame.getContentPane().removeMouseMotionListener(view);
+		for (CellV[] row : view.getBoardCells()) {
+			for (CellV cell : row) {
+				cell.removeMouseMotionListener(cell);
+			}
+		}
+		for (CellV cell : view.getPlayerCells()) {
+			cell.removeMouseMotionListener(cell);
+		}
 	}
 
 	/**
@@ -496,8 +520,8 @@ public class MatchC implements MouseListener {
 	 */
 	public ArrayList<String> getInitializationInfos() {
 		/*
-		 * The client player gets the first move.
-		 * This happens because he gets synchronized the server player pass the turn
+		 * The client player gets the first move. This happens because he gets
+		 * synchronized the server player pass the turn
 		 */
 		passTurn(false);
 		ArrayList<String> data = new ArrayList<>();

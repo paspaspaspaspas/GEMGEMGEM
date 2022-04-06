@@ -32,6 +32,7 @@ public class UtilityClass {
 
 	// VIEW
 	public static final int CELL_PER_SIDE = 5;
+	public static final int NUM_ICONS = 8;
 
 	// ERRORS
 	public static final String MUSIC_ERROR = "[System] : THERE WAS AN ERROR LOADING THE BACKGROUND MUSIC";

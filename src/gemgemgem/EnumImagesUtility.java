@@ -14,10 +14,16 @@ import javax.imageio.ImageIO;
  *
  */
 public enum EnumImagesUtility {
-	RED_BACK("RedCardBack"), 
-	BLUE_BACK("BlueCardBack"), 
 	ICON1("King_Knight_Ultimate_Supreme_Portrait"),
 	ICON2("King_Knight_Mirror_Portrait"), 
+	ICON3("CharPortraitBlubberMeanie"),
+	ICON4("CharPortraitFloundair"),
+	ICON5("CharPortraitGoldome"),
+	ICON6("CharPortraitGuard2"),
+	ICON7("CharPortraitKingBirderCloaked"),
+	ICON8("CharPortraitTheGrandTriumvirate"),
+	RED_BACK("RedCardBack"), 
+	BLUE_BACK("BlueCardBack"), 
 	TABLE("table"), 
 	BACKGROUND("background");
 
